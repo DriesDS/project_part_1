@@ -1,6 +1,6 @@
 FC = gfortran
-objects = help.o test.o full.o lowrank.o matprod.o makeGFull.o solveIntFull.o plotField.o hmatrices.o wrongArg.o
-modules = helpmod.mod testmod.mod fullmod.mod lowrankmod.mod matprodmod.mod makeGFullmod.mod solveIntFullmod.mod plotFieldmod.mod wrongArgmod.mod
+objects = help.o test.o full.o lowrank.o matprod.o makeGFull.o solveIntFull.o plotField.o hmatrices.o wrongArg.o matrixConverter.o
+modules = helpmod.mod testmod.mod fullmod.mod lowrankmod.mod matprodmod.mod makegfullmod.mod solveintfullmod.mod plotfieldmod.mod wrongargmod.mod matrixconverter.mod
 
 # Eventuele compilatievlaggen per compiler
 FFLAGS_g95      = -g -pedantic -Wall -fbounds-check -ftrace=full
@@ -32,26 +32,30 @@ lowrank.o: lowrank.f90
 	$(FC) -c $(FFLAGS) lowrank.f90
 lowrankmod.mod: lowrank.f90 lowrank.o
 	$(FC) -c $(FFLAGS) lowrank.f90
-matprod.o: matprod.f90
+matprod.o: matprod.f90 matrixconverter.mod
 	$(FC) -c $(FFLAGS) matprod.f90
-matprodmod.mod: matprod.f90 matprod.o
+matprodmod.mod: matprod.f90 matprod.o matrixconverter.mod
 	$(FC) -c $(FFLAGS) matprod.f90
 makeGFull.o: makeGFull.f90
 	$(FC) -c $(FFLAGS) makeGFull.f90
-makeGFullmod.mod: makeGFull.f90 makeGFull.o
+makegfullmod.mod: makeGFull.f90 makeGFull.o
 	$(FC) -c $(FFLAGS) makeGFull.f90
 solveIntFull.o: solveIntFull.f90
 	$(FC) -c $(FFLAGS) solveIntFull.f90
-solveIntFullmod.mod: solveIntFull.f90 solveIntFull.o
+solveintfullmod.mod: solveIntFull.f90 solveIntFull.o
 	$(FC) -c $(FFLAGS) solveIntFull.f90
 plotField.o: plotField.f90
 	$(FC) -c $(FFLAGS) plotField.f90
-plotFieldmod.mod: plotField.f90 plotField.o
+plotfieldmod.mod: plotField.f90 plotField.o
 	$(FC) -c $(FFLAGS) plotField.f90
 wrongArg.o: wrongArg.f90
 	$(FC) -c $(FFLAGS) wrongArg.f90
-wrongArgmod.mod: wrongArg.f90 wrongArg.o
+wrongargmod.mod: wrongArg.f90 wrongArg.o
 	$(FC) -c $(FFLAGS) wrongArg.f90
+matrixConverter.o: matrixConverter.f90
+	$(FC) -c $(FFLAGS) matrixConverter.f90
+matrixconverter.mod: matrixConverter.f90 matrixConverter.o
+	$(FC) -c $(FFLAGS) matrixConverter.f90
 
 clean:
 	rm $(objects) $(modules)
