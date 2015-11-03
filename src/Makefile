@@ -1,4 +1,6 @@
 FC = gfortran
+VPATH = src
+
 objects = help.o test.o full.o lowrank.o matprod.o makeGFull.o solveIntFull.o plotField.o hmatrices.o wrongArg.o matrixConverter.o
 modules = helpmod.mod testmod.mod fullmod.mod lowrankmod.mod matprodmod.mod makegfullmod.mod solveintfullmod.mod plotfieldmod.mod wrongargmod.mod matrixconverter.mod
 
