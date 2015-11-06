@@ -98,4 +98,6 @@ subroutine test07 ( )
   call r8mat_print ( m, n, a, '  The product U * S * V'':' )
 
   return
-end
+end subroutine
+
+end program
