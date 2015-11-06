@@ -1,3 +1,9 @@
+program main
+
+implicit none
+
+contains
+
 subroutine test07 ( )
 
 !*****************************************************************************80
