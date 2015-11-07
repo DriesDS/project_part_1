@@ -12,6 +12,8 @@ contains
 
 	subroutine test()
 		integer :: i
+		double precision :: alpha, beta
+		integer :: m,n,k
 		double precision, dimension(5,3) :: A = reshape((/&
 			1.0, 1.0, 2.0, &
 			2.0, 1.0, 3.0, &
@@ -30,7 +32,12 @@ contains
 			write(*,'(2(3(e12.3),5x))') A(i,:), B(i,:)
 		enddo
 
-		call dgemm('N','T',5,5,3,1.0,A,5,B,5,0,C,5)
+		alpha = 1.0
+		beta = 0.0
+		m = 5
+		n = 5
+		k = 3
+		call dgemm('N','T',m,n,k,alpha,A,m,B,m,beta,C,m)
 
 		write(*,*) '\n', '\n'
 		do i = 1,5
