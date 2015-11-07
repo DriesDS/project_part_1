@@ -9,6 +9,7 @@ program hmatrices
 	use solveIntFullmod
 	use plotFieldmod
 	use wrongArgmod
+	use readtestmod
 	
 	implicit none
 	
@@ -35,6 +36,8 @@ program hmatrices
 		call solveIntFull()
 	case('plotField')
 		call plotField()
+	case('readtest')
+		call readtest()
 	case default
 		call wrongArg()
 	end select

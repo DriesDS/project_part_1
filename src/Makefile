@@ -1,14 +1,16 @@
-FC = gfortran
+FC = ifort
 VPATH = src
 
-objects = help.o test.o full.o lowrank.o matprod.o makeGFull.o solveIntFull.o plotField.o hmatrices.o wrongArg.o matrixConverter.o
-modules = helpmod.mod testmod.mod fullmod.mod lowrankmod.mod matprodmod.mod makegfullmod.mod solveintfullmod.mod plotfieldmod.mod wrongargmod.mod matrixconverter.mod
+objects = help.o test.o full.o lowrank.o matprod.o makeGFull.o solveIntFull.o plotField.o hmatrices.o wrongArg.o matrixConverter.o readtest.o
+modules = helpmod.mod testmod.mod fullmod.mod lowrankmod.mod matprodmod.mod makegfullmod.mod solveintfullmod.mod plotfieldmod.mod wrongargmod.mod matrixconverter.mod readtest.o
 
 # Eventuele compilatievlaggen per compiler
 FFLAGS_g95      = -g -pedantic -Wall -fbounds-check -ftrace=full
 # FFLAGS_gfortran = -g -pedantic -Wall -Wimplicit-interface -Wunderflow -fbounds-check -fimplicit-none
-FFLAGS_ifort    = -g -debug full -implicitnone -check -warn -free -Tf
+FFLAGS_ifort    = -lblas -llapack#-g -debug full -implicitnone -check -warn -free -Tf
 FFLAGS_nagfor   = -g -C=all -gline -u -info -colour -kind=byte
+
+options = -lblas -llapack 
 
 # Selecteer de juiste vlaggen voor de huidige compiler
 FFLAGS=$(FFLAGS_$(FC))
@@ -58,6 +60,10 @@ matrixConverter.o: matrixConverter.f90
 	$(FC) -c $(FFLAGS) matrixConverter.f90
 matrixconverter.mod: matrixConverter.f90 matrixConverter.o
 	$(FC) -c $(FFLAGS) matrixConverter.f90
+readtest.mod: readtest.f90 readtest.o
+	$(FC) -c $(FFLAGS) readtest.f90
+readtest.o: readtest.f90
+	$(FC) -c $(FFLAGS) readtest.f90
 
 clean:
 	rm $(objects) $(modules)
