@@ -39,8 +39,9 @@ contains
 		alpha = 1.0
 		beta = 0.0
 		allocate(C)
-		C%full = .false.
+		C%full = B%full
 		allocate(C%Ut(m,n))
+		C%Vt = B%Vt
 		
 		!write(*,*) 'DEBUGGING INFORMATION'
 		!write(*,*) 'size of A%Ut: ', size(A%Ut,1), ',', size(A%Ut,2)
@@ -48,12 +49,8 @@ contains
 		
 		call dgemm('N','N', m, n, k, alpha, B%Ut, m, A%Ut, k, beta, C%Ut, m)
 
-		if (B%full) then
-			call matrixWriter(C)
-		else
-			call matrixWriter(C,B)
-		endif
-
+		call matrixWriter(C)
+		
 		deallocate(C)
 
 	end subroutine
