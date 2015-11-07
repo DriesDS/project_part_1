@@ -2,6 +2,8 @@ program main
 
 implicit none
 
+call test07()
+
 contains
 
 subroutine test07 ( )
@@ -326,7 +328,7 @@ subroutine r8vec_print_some ( n, a, i_lo, i_hi, title )
 
   write ( *, '(a)' ) ' '
   do i = max ( i_lo, 1 ), min ( i_hi, n )
-    write ( *, '(2x,i8,2x,g14.8)' ) i, a(i)
+    write ( *, '(2x,i8,2x,e15.8)' ) i, a(i)
   end do
 
   return
