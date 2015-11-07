@@ -110,6 +110,7 @@ contains
 				enddo
 			endif
 		endif
+		write(outunit,'(/)')
 	end subroutine
 
 end module
