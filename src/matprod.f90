@@ -66,14 +66,14 @@ contains
 		! A*B = C - met A niet van volle rank en B wel
 		! aangezien we de getransponeerden opslaan: (C^t = C%Vt^t*C%Ut)
 		! C^t = (A*B)^t = B^t*A^t = B%Ut*(A%Ut^t*A%Vt)^t = B%Ut*A%Vt^t*A%Ut
-		! we berekenen dus C%Ut = A%Ut en C%Vt = B%Ut*A%Vt^t
+		! we berekenen dus C%Ut = A%Ut en C%Vt = A%Vt*B%Ut^t
 
 		type(Matrix), pointer :: A, B, C
 		double precision :: alpha, beta
 		integer :: m,n,k
 		
-		m = size(B%Ut,1)
-		n = size(A%Vt,1)
+		m = size(A%Vt,1)
+		n = size(B%Ut,1)
 		k = size(B%Ut,2)
 		alpha = 1.0
 		beta = 0.0
@@ -88,7 +88,7 @@ contains
 		!write(*,*) 'size of A%Ut: ', size(A%Ut,1), ',', size(A%Ut,2)
 		!write(*,*) 'size of B%Ut: ', size(B%Ut,1), ',', size(B%Ut,2)
 		
-		call dgemm('N','T', m, n, k, alpha, B%Ut, m, A%Vt, n, beta, C%Ut, m)
+		call dgemm('N','T', m, n, k, alpha, A%Vt, m, B%Ut, n, beta, C%Ut, m)
 
 		call matrixWriter(C)
 		
