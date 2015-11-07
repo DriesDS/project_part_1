@@ -8,7 +8,7 @@ integer, parameter :: wp = kind(0.d0)
 type Matrix
 	! when the matrix is full, only Ut will be used
 	logical :: full
-	real(wp), allocatable :: Ut(:,:), Vt(:,:)
+	double precision, allocatable :: Ut(:,:), Vt(:,:)
 end type
 
 contains
@@ -72,8 +72,9 @@ contains
 		enddo 
 	end subroutine
 
-	subroutine matrixWriter(matp, optoutunit)
-		type(Matrix), pointer :: matp
+	subroutine matrixWriter(matpu, matpv, optoutunit)
+		type(Matrix), pointer :: matpu
+		type(Matrix), pointer, optional :: matpv
 		integer, optional, intent(in) :: optoutunit
 		integer :: row, col, rows, cols, rank, outunit
 		character(len=16) :: rowstr, colstr, rankstr
@@ -81,27 +82,33 @@ contains
 		
 		outunit = defaultout
 		if (present(optoutunit)) outunit = optoutunit
-		
-		if (matp%full) then
-			rows = size(matp%Ut,2)
-			cols = size(matp%Ut,1)
+
+		if (matpu%full) then
+			rows = size(matpu%Ut,2)
+			cols = size(matpu%Ut,1)
 			write(header,'(a,i0,a,i0,a)') 'full matrix [', rows, ' x ', cols, ']'
 		else
-			rows = size(matp%Ut,2)
-			cols = size(matp%Vt,2)
-			rank = size(matp%Ut,1)
+			rows = size(matpu%Ut,2)
+			cols = size(matpu%Vt,2)
+			rank = size(matpu%Ut,1)
 			write(header,'(a,i0,a,i0,a,i0,a)') 'rank-', rank, ' matrix [', rows, ' x ', cols, ']'
 		endif
 
 		write(outunit,'(a)') header
 		do row = 1,rows
-			write(outunit,*) matp%Ut(:,row)
+			write(outunit,*) matpu%Ut(:,row)
 		enddo
-		if (.not. matp%full) then
+		if (.not. matpu%full) then
 			write(outunit,*) '----------'
-			do row = 1,cols
-				write(outunit,*) matp%Vt(:,row)
-			enddo
+			if (present(matpv)) then
+				do row = 1,cols
+					write(outunit,*) matpv%Vt(:,row)
+				enddo
+			else
+				do row = 1,cols
+					write(outunit,*) matpu%Vt(:,row)
+				enddo
+			endif
 		endif
 	end subroutine
 
