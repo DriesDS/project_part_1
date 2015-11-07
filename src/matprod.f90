@@ -106,7 +106,7 @@ contains
 		type(Matrix), pointer :: A, B, C
 		double precision, dimension(size(B%Ut,1),size(A%Vt,1)) :: tempM
 		double precision :: alpha, beta
-		integer :: m,n,k
+		integer :: m,n,n2,k
 		
 		m = size(B%Ut,1)
 		n = size(A%Vt,1)
