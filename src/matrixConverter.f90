@@ -78,7 +78,7 @@ contains
 		integer, optional, intent(in) :: optoutunit
 		integer :: row, col, rows, cols, rank, outunit
 		character(len=16) :: rowstr, colstr, rankstr
-		character(len=100) :: header
+		character(len=32) :: header
 		
 		outunit = defaultout
 		if (present(optoutunit)) outunit = optoutunit
@@ -94,7 +94,7 @@ contains
 			write(header,'(a,i0,a,i0,a,i0,a)') 'rank-', rank, ' matrix [', rows, ' x ', cols, ']'
 		endif
 
-		write(outunit,'(a)') header
+		write(outunit,'(a)') trim(header)
 		do row = 1,rows
 			write(outunit,*) matpu%Ut(:,row)
 		enddo
@@ -110,7 +110,7 @@ contains
 				enddo
 			endif
 		endif
-		write(outunit,'(/)')
+		write(outunit,*)
 	end subroutine
 
 end module

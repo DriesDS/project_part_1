@@ -41,6 +41,7 @@ contains
 		allocate(C)
 		C%full = B%full
 		allocate(C%Ut(m,n))
+		allocate(C%Vt(size(B%Vt,1),size(B%Vt,2)))
 		C%Vt = B%Vt
 		
 		!write(*,*) 'DEBUGGING INFORMATION'
