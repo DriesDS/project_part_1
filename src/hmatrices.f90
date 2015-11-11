@@ -47,28 +47,33 @@ contains
 	subroutine lowrankcall(nbarg)
 		character(len=8) :: currarg, arg1, arg2, arg3
 		integer, intent(in) :: nbarg
-		integer :: i, rank, epsabs, epsrel
+		integer :: i, rank
+		double precision :: epsabs, epsrel
 		
-		if (mod(nbarg,2) == 0) call wrongArg()
-		
-		do i = 1, (nbarg-1)/2
-			call getarg(i*2,currarg)
-			select case(currarg)
-			case ('rank')
-				call getarg(i*2+1, currarg)
-				read(currarg,*) rank
-			case ('epsabs')
-				call getarg(i*2+1, currarg)
-				read(currarg,*) epsabs
-			case ('epsrel')
-				call getarg(i*2+1, currarg)
-				read(currarg,*) epsrel
-			case default
-				call wrongArg()
-			end select
-		enddo
-	
-	call lowrank()
+		!if (mod(nbarg,2) == 0) call wrongArg()
+		!
+		!do i = 1, (nbarg-1)/2
+		!	call getarg(i*2,currarg)
+		!	select case(currarg)
+		!	case ('rank')
+		!		call getarg(i*2+1, currarg)
+		!		read(currarg,*) rank
+		!	case ('epsabs')
+		!		call getarg(i*2+1, currarg)
+		!		read(currarg,*) epsabs
+		!	case ('epsrel')
+		!		call getarg(i*2+1, currarg)
+		!		read(currarg,*) epsrel
+		!	case default
+		!		call wrongArg()
+		!	end select
+		!enddo
+
+		rank = 0
+		epsabs = 0.0
+		epsrel = 0.0
+
+		call lowrank(rank, epsabs, epsrel)
 	
 	end subroutine
 
