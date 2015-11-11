@@ -13,13 +13,12 @@ contains
 		character :: jobu, jobvt
 		double precision, dimension(:), allocatable :: S
 		double precision, dimension(:), allocatable :: work, U
-		double precision, dimension(1:1) :: dummy
 		type(Matrix), pointer :: A,B
 
 		write(*,*) 'in lowrank'
 		call matrixReader(A)
 		write(*,*) 'matrix readed'
-		jobu = 'O' !first min(m,n) left singular vectors returned in U
+		jobu = 'S' !first min(m,n) left singular vectors returned in U
 		jobvt = 'S' !first min(m,n) right singular vectors returned in Vt
 		m = size(A%Ut,1)
 		n = size(A%Ut,2)
@@ -38,16 +37,11 @@ contains
 		write(*,*) 'calling dgesvd'
 		write(*,*) 'jobu: ', jobu, 'jobvt: ', jobvt, 'm: ', m, 'n: ', n
 		write(*,*) 
-		call dgesvd(jobu, jobvt, m, n, A%Ut, m, S, dummy, 1, B%Vt, n, work, lwork, info)
+		call dgesvd(jobu, jobvt, m, n, A%Ut, m, S, B%Ut, m, B%Vt, n, work, lwork, info)
 
 		write(*,*) 'info: ', info
-		write(*,*) A%Ut
-		write(*,*) 'B:'
-		write(*,*) B%Vt(:,1)
-		write(*,*) B%Vt(:,2)
-		write(*,*) B%Vt(:,3)
-		write(*,*) B%Vt(:,4)
-		write(*,*) B%Vt(:,5)
+		write(*,*) B%Ut
+		write(*,*) B%Vt
 
 		deallocate(work)
 		deallocate(A%Ut, A%Vt, B%Ut, B%Vt)
