@@ -105,36 +105,45 @@ contains
 		! aangezien we de getransponeerden opslaan: (C^t = C%Vt^t*C%Ut)
 		! C^t = (A*B)^t = B^t*A^t = (B%Ut^t*B%Vt)^t*(A%Ut^t*A%Vt)^t
 		!                         = B%Vt^t*B%Ut*A%Vt^t*A%Ut
-		! we berekenen dus C%Ut = (B%Ut*A%Vt^t)*A%Ut en C%Vt = B%Vt
+		! Als matrix B van laagste rang is:
+		! we berekenen C%Ut = (B%Ut*A%Vt^t)*A%Ut en C%Vt = B%Vt
+		! Als matrix A van laagste rang is:
+		! we berekenen C%Ut = A%Ut en C%Vt = A%Vt*B%Ut^t*B%Vt
 		type(Matrix), pointer :: A, B, C
 		double precision, dimension(size(B%Ut,1),size(A%Vt,1)) :: tempM
 		double precision :: alpha, beta
 		integer :: m,n,n2,k
-		
-		write(*,*) 'initializing values'
+		logical :: Asmallest
+
+		Asmallest = size(B%Ut,1) > size(A%Ut,1)
+
 		m = size(B%Ut,1)
 		n = size(A%Vt,1)
-		n2 = size(A%Ut,2)
 		k = size(B%Ut,2)
 		alpha = 1.0
 		beta = 0.0
-
-		write(*,*) 'allocating C'
+		call dgemm('N','T', m, n, k, alpha, B%Ut, m, A%Vt, n, beta, tempM, m)
+		
 		allocate(C)
 		C%full = .false.
-		allocate(C%Ut(m,n2))
-		write(*,*) 'Ut allocated, now only Vt'
-		allocate(C%Vt(size(B%Vt,1),size(B%Vt,2)))
-		write(*,*) 'C%Vt = B%Vt'
-		C%Vt = B%Vt
+		if Asmallest then
+			n2 = size(B%Vt,2)
+			allocate(C%Ut(size(A%Ut,1),size(A%Vt,2)))
+			allocate(C%Vt(n,size(B%Vt,2)))
+			C%Ut = A%Ut
+			call dgemm('T','N', n, n2, m, alpha, tempM, m, B%Vt, m, beta, C%Vt, n)
+		else
+			n2 = size(A%Vt,1)
+			allocate(C%Ut(m,n2))
+			allocate(C%Vt(size(B%Vt,1),size(B%Vt,2)))
+			C%Vt = B%Vt
+			call dgemm('N','N', m, n2, n, alpha, tempM, m, A%Ut, n, beta, C%Ut, m)
+		endif
 		
-		write(*,*) 'DEBUGGING INFORMATION'
-		write(*,*) 'size of A%Ut: ', size(A%Ut,1), ',', size(A%Ut,2)
-		write(*,*) 'size of B%Ut: ', size(B%Ut,1), ',', size(B%Ut,2)
-		write(*,*) 'size of tempM: ', size(tempM,1), ',', size(tempM,2)
-		
-		call dgemm('N','T', m, n, k, alpha, B%Ut, m, A%Vt, n, beta, tempM, m)
-		call dgemm('N','N', m, n2, n, alpha, tempM, m, A%Ut, n, beta, C%Ut, m)
+		!write(*,*) 'DEBUGGING INFORMATION'
+		!write(*,*) 'size of A%Ut: ', size(A%Ut,1), ',', size(A%Ut,2)
+		!write(*,*) 'size of B%Ut: ', size(B%Ut,1), ',', size(B%Ut,2)
+		!write(*,*) 'size of tempM: ', size(tempM,1), ',', size(tempM,2)
 
 		call matrixWriter(C)
 		
