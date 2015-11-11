@@ -128,14 +128,14 @@ contains
 		
 		allocate(C)
 		C%full = .false.
-		if (Asmallest) then
+		if Asmallest then
 			n2 = size(B%Vt,2)
 			allocate(C%Ut(size(A%Ut,1),size(A%Vt,2)))
 			allocate(C%Vt(n,size(B%Vt,2)))
 			C%Ut = A%Ut
 			call dgemm('T','N', n, n2, m, alpha, tempM, m, B%Vt, m, beta, C%Vt, n)
 		else
-			n2 = size(A%Ut,2)
+			n2 = size(A%Vt,1)
 			allocate(C%Ut(m,n2))
 			allocate(C%Vt(size(B%Vt,1),size(B%Vt,2)))
 			C%Vt = B%Vt
