@@ -31,6 +31,7 @@ contains
 			call matrixWriter(B)
 		endif
 
+		deallocate(A%Ut, A%Vt, B%Ut, B%Vt)
 		deallocate(A,B)
 
 	end subroutine

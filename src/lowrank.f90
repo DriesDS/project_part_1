@@ -50,6 +50,7 @@ contains
 		write(*,*) B%Vt(:,5)
 
 		deallocate(work)
+		deallocate(A%Ut, A%Vt, B%Ut, B%Vt)
 		deallocate(A,B)
 		
 	end subroutine

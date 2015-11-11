@@ -8,7 +8,7 @@ integer, parameter :: wp = kind(0.d0)
 type Matrix
 	! when the matrix is full, only Ut will be used
 	logical :: full
-	double precision, allocatable :: Ut(:,:), Vt(:,:)
+	double precision, pointer :: Ut(:,:), Vt(:,:)
 end type
 
 contains
@@ -38,7 +38,7 @@ contains
 	subroutine fullMatrixReader(matp, inunit, rows, cols)
 		type(Matrix), pointer :: matp
 		integer, intent(in) :: inunit, rows, cols
-		real(wp) :: rowelems(cols)
+		double precision :: rowelems(cols)
 		integer :: row
 		
 		allocate(matp)
