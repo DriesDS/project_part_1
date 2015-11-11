@@ -25,8 +25,8 @@ contains
 			endif
 		endif
 
-		deallocate(A%Ut, A%Vt, A)
-		deallocate(B%Ut, B%Vt, B)
+		deallocate(A)
+		deallocate(B)
 	end subroutine
 	
 	subroutine leftfullprod(A, B)
@@ -58,7 +58,6 @@ contains
 
 		call matrixWriter(C)
 		
-		deallocate(C%Ut, C%Vt)
 		deallocate(C)
 
 	end subroutine
@@ -97,7 +96,6 @@ contains
 
 		call matrixWriter(C)
 		
-		deallocate(C%Ut, C%Vt)
 		deallocate(C)
 
 	end subroutine
@@ -149,7 +147,6 @@ contains
 
 		call matrixWriter(C)
 		
-		deallocate(C%Ut, C%Vt)
 		deallocate(C)
 
 	end subroutine
