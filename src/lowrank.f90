@@ -13,7 +13,6 @@ contains
 		character :: jobu, jobvt
 		double precision, dimension(:), allocatable :: S
 		double precision, dimension(:), allocatable :: work, U
-		double precision, dimension(1:1) :: dummy
 		type(Matrix), pointer :: A,B
 
 		call matrixReader(A)
