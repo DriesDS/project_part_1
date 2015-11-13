@@ -126,7 +126,7 @@ contains
 		
 		allocate(C)
 		C%full = .false.
-		if Asmallest then
+		if (Asmallest) then
 			n2 = size(B%Vt,2)
 			allocate(C%Ut(size(A%Ut,1),size(A%Vt,2)))
 			allocate(C%Vt(n,size(B%Vt,2)))

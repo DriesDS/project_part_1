@@ -6,6 +6,9 @@ implicit none
 
 contains
 
+	! we berekenen A^t = U,S,Vt
+	! we weten dus dat A = Vt^t*S*U^t
+	! We moeten dus Vt opslaan in A%Ut en U^t in A%Vt
 	subroutine lowrank(rank, epsabs, epsrel)
 		double precision, optional :: epsrel, epsabs
 		integer, optional :: rank
@@ -13,6 +16,7 @@ contains
 		character :: jobu, jobvt
 		double precision, dimension(:), allocatable :: S
 		double precision, dimension(:), allocatable :: work, U
+		double precision, dimension(1,1) :: dummy
 		type(Matrix), pointer :: A,B
 
 		call matrixReader(A)
@@ -25,17 +29,26 @@ contains
 		
 		allocate(B)
 		B%full = .false.
-		if (m<n) then
-			jobu = 'O' !first min(m,n) left singular vectors returned in A
+		if (m<n) then 
+			jobu = 'S' !first min(m,n) left singular vectors returned in A
 			jobvt = 'S' !first min(m,n) right singular vectors returned in Vt
-			allocate(B%Vt(n,n))
-			call dgesvd(jobu, jobvt, m, n, A%Ut, m, S, dummy, 1, B%Vt, n, work, lwork, info)
+			allocate(B%Vt(m,m))
+			allocate(B%Ut(m,n))
+			call dgesvd(jobu, jobvt, m, n, A%Ut, m, S, B%Vt, m, B%Ut, m, work, lwork, info)
+			B%Vt = transpose(B%Vt)
 		else
-			jobu = 'S'
-			jobvt = 'O'
-			allocate(B%Ut(m,m))
-			call dgesvd(jobu, jobvt, m, n, A%Ut, m, S, B%Ut, m, dummy, 1, work, lwork, info)
+			jobu = 'O' !use O for storing in A
+			jobvt = 'S'
+			allocate(B%Ut(n,n))
+			allocate(B%Vt(n,m))
+			write(*,*) size(B%Vt,1), n
+			call dgesvd(jobu, jobvt, m, n, A%Ut, m, S, A%Ut, m, B%Ut, n, work, lwork, info)
+			write(*,*) size(B%Vt,1), size(B%Vt,2)
+			B%Vt = transpose(A%Ut)
+			write(*,*) size(B%Vt,1), size(B%Vt,2)
 		endif
+		
+		call matrixWriter(B)
 		
 		deallocate(work)
 		deallocate(A,B)
