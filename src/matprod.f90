@@ -105,7 +105,7 @@ contains
 
 	end subroutine
 	
-	subroutine rankrankprod(A, B)
+	subroutine rankrankprod(A, B, C)
 		! A*B = C - mat A en B allebei niet van volle rang
 		! aangezien we de getransponeerden opslaan: (C^t = C%Vt^t*C%Ut)
 		! C^t = (A*B)^t = B^t*A^t = (B%Ut^t*B%Vt)^t*(A%Ut^t*A%Vt)^t
