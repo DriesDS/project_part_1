@@ -13,7 +13,7 @@ program hmatrices
 	
 	implicit none
 	
-	integer :: nbarg
+	integer :: nbarg, N
 	character(len=16) :: cmd
 	
 	call getarg(1,cmd)
@@ -31,7 +31,9 @@ program hmatrices
 	case('matprod')
 		call matprod()
 	case('makeGFull')
-		call makeGFull()
+		call getarg(2,cmd)
+		read(cmd,*) N
+		call makeGFull(N)
 	case('solveIntFull')
 		call solveIntFull()
 	case('plotField')
