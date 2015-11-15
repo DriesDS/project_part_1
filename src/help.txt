@@ -4,11 +4,11 @@
 	solve a certain integral equation
 			
 		Matrices can either be full or in a rank-k approximation.
-		Matrices are read on std_in in the given format:
+		Matrices are read on stdin in the given format:
 		
-		full matrix:						rank-k approximation:
+		full matrix:                        rank-k approximation:
 
-		full matrix [{m} x {n}]				rank-{k} matrix [{m} x {n}]
+		full matrix [{m} x {n}]             rank-{k} matrix [{m} x {n}]
 		...matrix(1,1:n)...                 ...A(1,1:k)...
 		...matrix(2,1:n)...                 ...A(2,1:k)...
 		   .........                           .......
@@ -26,14 +26,36 @@
 	with -t optional and {cmd} one of the following:
 
 		help:
-		shows you the help file with the explanation of all the possible commands
+			shows you the help file with the explanation of all the possible 
+			commands
 
 		test:
-		executes all the tests and shows the results
+			executes all the tests and shows the results
 
 		full:
-		reads a rank-k matrix from std_in and converts it to a full matrix.
-		This matrix is given on std_out.
+			reads a rank-k matrix from stdin and converts it to a full matrix.
+			This matrix is given on std_out.
 
 		lowrank [rank k | epsabs e_abs | epsrel e_rel]:
-		reads a matrix from std_in and gives the rank_k matrix on std_out
+			Reads a matrix from stdin and gives the rank_k approximation on
+			stdout. The method can be specified with one of three possibilities:
+			rank epsabs or epsrel. If none of them is specified, the method
+			choses himself a rank.
+
+		matprod:
+			Reads two matrices from stdin and gives the product on stdout.
+			If one or two matrices is given as an approximation, the output
+			is of the lowest rank.
+
+		makeGFull N:
+			Calculates the matrix necessary for the calculation of the integral
+			equation. It gives the matrix in the matrix convention on stdout.
+
+		solveIntFull N:
+			Reads a 2xL matrix x from stdin. The method then calculates the same
+			matrix as in makeGFull and prints u (the solution of the integral 
+			equation) in the points specified in x on stdout. The argument N
+			specifies the number of terms used in the approximation.
+
+		plotField N:
+			Reads as in solveIntFull a 2xL matrix x and 
