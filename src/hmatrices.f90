@@ -35,7 +35,9 @@ program hmatrices
 		read(cmd,*) N
 		call makeGFull(N)
 	case('solveIntFull')
-		call solveIntFull()
+		call getarg(2,cmd)
+		read(cmd,*) N
+		call solveIntFull(N)
 	case('plotField')
 		call plotField()
 	case('readtest')
