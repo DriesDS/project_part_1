@@ -3,6 +3,7 @@ module matrixconverter
 implicit none
 
 integer, parameter :: defaultin=5, defaultout=6
+character(len=16), parameter :: separationstr='---------'
 integer, parameter :: wp = kind(0.d0)
 
 type Matrix
@@ -72,45 +73,115 @@ contains
 		enddo 
 	end subroutine
 
-	subroutine matrixWriter(matpu, matpv, optoutunit)
+	subroutine matrixWriter(matpu, rank, optoutunit)
 		type(Matrix), pointer :: matpu
-		type(Matrix), pointer, optional :: matpv
-		integer, optional, intent(in) :: optoutunit
-		integer :: row, col, rows, cols, rank, outunit
-		character(len=16) :: rowstr, colstr, rankstr
+		integer, optional, intent(in) :: rank, optoutunit
+		integer :: row, col, rows, cols, rank_k, outunit, dig, prec
 		character(len=32) :: header
-		
+		character(len=32) :: fmtstr
+
+		dig = 24
+		prec = 16
 		outunit = defaultout
-		if (present(optoutunit)) outunit = optoutunit
+		if (present(optoutunit)) then
+			write(*,*) 'her is the fault'
+			outunit = optoutunit
+		endif
 
 		if (matpu%full) then
 			rows = size(matpu%Ut,2)
 			cols = size(matpu%Ut,1)
+			rank_k = cols
 			write(header,'(a,i0,a,i0,a)') 'full matrix [', rows, ' x ', cols, ']'
 		else
 			rows = size(matpu%Ut,2)
 			cols = size(matpu%Vt,2)
-			rank = size(matpu%Ut,1)
-			write(header,'(a,i0,a,i0,a,i0,a)') 'rank-', rank, ' matrix [', rows, ' x ', cols, ']'
+			rank_k = size(matpu%Ut,1)
+			if(present(rank)) rank_k = rank
+			write(header,'(a,i0,a,i0,a,i0,a)') 'rank-', rank_k, ' matrix [', rows, ' x ', cols, ']'
 		endif
 
 		write(outunit,'(a)') trim(header)
+		write(fmtstr,'(a,i0,a,i0,a,i0,a)') '(', rank_k, '(e', dig, '.', prec, '))'
 		do row = 1,rows
-			write(outunit,*) matpu%Ut(:,row)
+			write(outunit,fmtstr) matpu%Ut(:rank_k,row)
 		enddo
 		if (.not. matpu%full) then
 			write(outunit,*) '----------'
-			if (present(matpv)) then
-				do row = 1,cols
-					write(outunit,*) matpv%Vt(:,row)
+			do row = 1,cols
+				write(outunit,fmtstr) matpu%Vt(:rank_k,row)
+			enddo
+		endif
+		write(outunit,*)
+	end subroutine
+
+	subroutine lowlevelwriter(U, jobU, V, jobV, rank, optoutunit)
+		double precision, intent(in) :: U(:,:)
+		double precision, optional, intent(in) :: V(:,:)
+		character :: jobU
+		character, optional :: jobV
+		character(len=32) :: header
+		integer, optional, intent(in) :: optoutunit, rank
+		integer :: outunit, rows, cols, row, col, r
+		logical :: full
+		
+		full = .true.
+		if (present(V) .and. present(jobV)) full = .false.
+		outunit = defaultout
+		if (present(optoutunit)) outunit = optoutunit
+		
+		if (full) then
+			if (jobU == 'T' .or. jobU == 't') then
+				rows = size(U,2)
+				cols = size(U,1)
+			else
+				rows = size(U,1)
+				cols = size(U,2)
+			endif
+			write(header,'(a,i0,a,i0,a)') 'full matrix [', rows, ' x ', cols, ']'
+		else
+			if (jobU == 'T' .or. jobV == 't') then
+				rows = size(U,2)
+				r = size(U,1)
+			else
+				rows = size(U,1)
+				r = size(U,2)
+			endif
+			if (present(rank)) r = rank
+			if (jobV == 'T' .or. jobV == 't') then
+				cols = size(V,1)
+			else
+				cols = size(V,2)
+			endif
+
+			write(header,'(a,i0,a,i0,a,i0,a)') 'rank-', r, ' matrix [', rows, ' x ', cols, ']'
+		endif
+
+		write(outunit,'(a)') trim(header)
+		
+		if (jobU == 'T' .or. jobU == 't') then
+			do row = 1,rows
+				write(outunit,*) U(:r,row)
+			enddo
+		else
+			do row = 1,rows
+				write(outunit,*) U(row,:r)
+			enddo
+		endif
+		if (.not. full) then
+			write(outunit,*) separationstr
+			if (jobV == 'T' .or. jobV == 't') then
+				do col = 1,cols
+					write(outunit,*) V(:r,col)
 				enddo
 			else
-				do row = 1,cols
-					write(outunit,*) matpu%Vt(:,row)
+				do col = 1,cols
+					write(outunit,*) V(col,:r)
 				enddo
 			endif
 		endif
 		write(outunit,*)
+
 	end subroutine
 
 end module

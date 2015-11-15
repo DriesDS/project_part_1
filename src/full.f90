@@ -27,7 +27,7 @@ contains
 			B%full = .true.
 			allocate(B%Ut(m,n))
 
-			call dgemm('T','N',m,n,k,alpha,A%Vt,k,A%Ut,k,beta,B%Ut)
+			call dgemm('T','N',m,n,k,alpha,A%Vt,k,A%Ut,k,beta,B%Ut,m)
 
 			call matrixWriter(B)
 		endif

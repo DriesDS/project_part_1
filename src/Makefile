@@ -2,11 +2,11 @@ FC = ifort
 VPATH = src
 
 objects = help.o test.o full.o lowrank.o matprod.o makeGFull.o solveIntFull.o plotField.o hmatrices.o wrongArg.o matrixConverter.o readtest.o
-modules = helpmod.mod testmod.mod fullmod.mod lowrankmod.mod matprodmod.mod makegfullmod.mod solveintfullmod.mod plotfieldmod.mod wrongargmod.mod matrixconverter.mod readtest.o
+modules = helpmod.mod testmod.mod fullmod.mod lowrankmod.mod matprodmod.mod makegfullmod.mod solveintfullmod.mod plotfieldmod.mod wrongargmod.mod matrixconverter.mod readtestmod.mod
 
 # Eventuele compilatievlaggen per compiler
 FFLAGS_g95      = -g -pedantic -Wall -fbounds-check -ftrace=full
-# FFLAGS_gfortran = -g -pedantic -Wall -Wimplicit-interface -Wunderflow -fbounds-check -fimplicit-none
+FFLAGS_gfortran = -lblas -llapack#-g -pedantic -Wall -Wimplicit-interface -Wunderflow -fbounds-check -fimplicit-none
 FFLAGS_ifort    = -lblas -llapack#-g -debug full -implicitnone -check -warn -free -Tf
 FFLAGS_nagfor   = -g -C=all -gline -u -info -colour -kind=byte
 
@@ -60,7 +60,7 @@ matrixConverter.o: matrixConverter.f90
 	$(FC) -c $(FFLAGS) matrixConverter.f90
 matrixconverter.mod: matrixConverter.f90 matrixConverter.o
 	$(FC) -c $(FFLAGS) matrixConverter.f90
-readtest.mod: readtest.f90 readtest.o
+readtestmod.mod: readtest.f90 readtest.o
 	$(FC) -c $(FFLAGS) readtest.f90
 readtest.o: readtest.f90
 	$(FC) -c $(FFLAGS) readtest.f90
