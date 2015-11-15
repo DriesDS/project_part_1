@@ -13,11 +13,24 @@ program hmatrices
 	
 	implicit none
 	
-	integer :: nbarg, N
+	type(Matrix), pointer :: A,B,C
+	integer :: nbarg, currarg, N
 	character(len=16) :: cmd
-	
-	call getarg(1,cmd)
+	logical :: timing
+
+	currarg = 1
+	timing = .false.
+
+	call getarg(currarg,cmd)
+	currarg = currarg+1
 	nbarg = iargc()
+
+	if (cmd == '-t') then
+		!start timing
+		call getarg(currarg,cmd)
+		currarg = currarg+1
+		timing = .true.
+	endif
 	
 	select case(cmd)
 	case('help')
@@ -25,15 +38,23 @@ program hmatrices
 	case('test')
 		call test()
 	case('full')
-		call full()
+		call matrixReader(A)
+		call full(A,B)
+		call matrixWriter(B)
+		deallocate(A,B)
 	case('lowrank')
 		call lowrankcall(nbarg)
 	case('matprod')
-		call matprod()
+		call matrixReader(A)
+		call matrixReader(B)
+		call matprod(A,B,C)
+		call matrixWriter(C)
+		deallocate(A,B,C)
 	case('makeGFull')
-		call getarg(2,cmd)
+		call getarg(currarg,cmd)
 		read(cmd,*) N
-		call makeGFull(N)
+		call makeGFull(B,N)
+		call matrixWriter(B)
 	case('solveIntFull')
 		call getarg(2,cmd)
 		read(cmd,*) N
@@ -45,6 +66,10 @@ program hmatrices
 	case default
 		call wrongArg()
 	end select
+
+	if (timing) then
+		! stop timing
+	endif
 
 contains
 

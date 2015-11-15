@@ -6,12 +6,13 @@ implicit none
 
 contains
 
-	subroutine full()
+	subroutine full(A,B)
 		integer :: m, n, k
-		type(Matrix), pointer :: A, B
+		type(Matrix), pointer, intent(in) :: A
+		type(Matrix), pointer, intent(inout) :: B
 		double precision :: alpha, beta
 
-		call matrixReader(A)
+		!call matrixReader(A)
 
 		if (A%full) then
 			call matrixWriter(A)
@@ -29,10 +30,10 @@ contains
 
 			call dgemm('T','N',m,n,k,alpha,A%Vt,k,A%Ut,k,beta,B%Ut,m)
 
-			call matrixWriter(B)
+			!call matrixWriter(B)
 		endif
 
-		deallocate(A,B)
+		!deallocate(B)
 
 	end subroutine
 

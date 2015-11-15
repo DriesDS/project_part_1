@@ -1,0 +1,8 @@
+hmatrices is a program to manipulate matrices in different ways.
+		
+	Matrices can either be full or in a rank-k approximation.
+	Matrices are read on std_in in the given format:
+	full matrix:			rank-k approximation:
+
+	rank-{k} matrix [{m} x {n}]
+	...A(1,1:m)...

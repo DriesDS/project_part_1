@@ -6,8 +6,8 @@ implicit none
 
 contains
 
-	subroutine makeGFull(N)
-		type(Matrix), pointer :: G
+	subroutine makeGFull(G, N)
+		type(Matrix), pointer, intent(inout) :: G
 		integer :: i,j
 		integer, intent(in) :: N
 		double precision, parameter :: pi=4d0*atan(1d0)
@@ -18,9 +18,9 @@ contains
 
 		call calculateGt(G%Ut, N)
 
-		call matrixWriter(G)
+		!call matrixWriter(G)
 
-		deallocate(G)
+		!deallocate(G)
 
 	end subroutine
 
