@@ -1,8 +1,39 @@
-hmatrices is a program to manipulate matrices in different ways.
-		
-	Matrices can either be full or in a rank-k approximation.
-	Matrices are read on std_in in the given format:
-	full matrix:			rank-k approximation:
 
-	rank-{k} matrix [{m} x {n}]
-	...A(1,1:m)...
+	hmatrices is a program to manipulate matrices in different ways.
+	It can manipulate matrices in a rank-k approximation and it can
+	solve a certain integral equation
+			
+		Matrices can either be full or in a rank-k approximation.
+		Matrices are read on std_in in the given format:
+		
+		full matrix:						rank-k approximation:
+
+		full matrix [{m} x {n}]				rank-{k} matrix [{m} x {n}]
+		...matrix(1,1:n)...					...A(1,1:k)...
+		...matrix(2,1:n)...					...A(2,1:k)...
+		   .........						   .......
+		...matirx(m,1:n)...					...A(m,1:k)...
+											-----------
+											...B(1,1:k)...
+											...B(2,1:k)...
+											   .......
+											...B(n,1:k)...
+
+		Where in the rank-k approximation the matrix = U*S*V^t the singular
+		value decomposition and A = U*S and B = V
+
+	the program can be used from the terminal as $ ./hmatrices [-t] {cmd}
+	with -t optional and {cmd} one of the following:
+
+		help:
+		shows you the help file with the explanation of all the possible commands
+
+		test:
+		executes all the tests and shows the results
+
+		full:
+		reads a rank-k matrix from std_in and converts it to a full matrix.
+		This matrix is given on std_out.
+
+		lowrank [rank k | epsabs e_abs | epsrel e_rel]:
+		reads a matrix from std_in and gives the rank_k matrix on std_out
