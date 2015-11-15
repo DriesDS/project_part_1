@@ -16,7 +16,7 @@ contains
 		G%full = .true.
 		allocate(G%Ut(N,N))
 
-		call calculateG(G%Ut, N)
+		call calculateGt(G%Ut, N)
 
 		call matrixWriter(G)
 
@@ -24,15 +24,15 @@ contains
 
 	end subroutine
 
-	subroutine calculateG(mat, N)
+	subroutine calculateGt(mat, N)
 		double precision, intent(inout) :: mat(N,N)
 		integer :: i,j
 		double precision, parameter :: pi=4d0*atan(1d0)
 		integer, intent(in) :: N
 
-		do j = 1,N
-			do i = 1,N
-				mat(i,j) = -0.5*log( 2*(1-cos((1.0+2*j-2*i)/N*pi)) )
+		do i = 1,N
+			do j = 1,N
+				mat(j,i) = -0.5d0*log( 2*(1-cos((1d0+2d0*j-2d0*i)/N*pi)) )
 			enddo
 		enddo
 	end subroutine
