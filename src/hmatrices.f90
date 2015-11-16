@@ -43,7 +43,7 @@ program hmatrices
 		call matrixWriter(B)
 		deallocate(A%Ut)
 		if (associated(B%Ut)) deallocate(B%Ut)
-		if (associated(A%Vt)) deallocate(A%Vt)
+		if (allocated(A%Vt)) deallocate(A%Vt)
 		if (associated(B%Vt)) deallocate(B%Vt)
 		deallocate(A,B)
 	case('lowrank')
