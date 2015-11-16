@@ -15,8 +15,11 @@ contains
 		!call matrixReader(A)
 
 		if (A%full) then
-			B%full = .false.
+			allocate(B)
+			B%full = .true.
 			B%Ut => A%Ut
+			!allocate(B%Ut(1,1))
+			!B%Ut(1,1) = 1
 		else
 			! B^t = A%Vt^t * A%Ut
 			m = size(A%Vt,2)
