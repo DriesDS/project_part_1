@@ -9,7 +9,10 @@ integer, parameter :: wp = kind(0.d0)
 type Matrix
 	! when the matrix is full, only Ut will be used
 	logical :: full
+	logical :: pointU, pointV
 	double precision, pointer :: Ut(:,:), Vt(:,:)
+	pointU = .false.
+	pointV = .false.
 end type
 
 contains
