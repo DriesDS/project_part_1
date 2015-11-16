@@ -84,7 +84,7 @@ contains
 
 	subroutine lowrankcall(currarg)
 		character(len=8) :: cmd
-		integer, intent(in) :: currarg
+		integer :: currarg
 		integer :: i, rank
 		double precision :: eps
 		
@@ -92,19 +92,19 @@ contains
 		currarg = currarg+1
 		select case(cmd)
 		case ('rank')
-			call getarg(currarg, currarg)
+			call getarg(currarg, cmd)
 			currarg = currarg+1
-			read(currarg,*) rank
+			read(cmd,*) rank
 			call lowrank(rank=rank)
 		case ('epsabs')
-			call getarg(currarg, currarg)
+			call getarg(currarg, cmd)
 			currarg = currarg+1
-			read(currarg,*) eps
+			read(cmd,*) eps
 			call lowrank(epsabs=eps)
 		case ('epsrel')
-			call getarg(currarg, currarg)
+			call getarg(currarg, cmd)
 			currarg = currarg+1
-			read(currarg,*) eps
+			read(cmd,*) eps
 			call lowrank(epsrel=eps)
 		case default
 			call help()
