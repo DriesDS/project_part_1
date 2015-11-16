@@ -15,7 +15,8 @@ contains
 		!call matrixReader(A)
 
 		if (A%full) then
-			call matrixWriter(A)
+			B%full = .false.
+			B%Ut => A%Ut
 		else
 			! B^t = A%Vt^t * A%Ut
 			m = size(A%Vt,2)
