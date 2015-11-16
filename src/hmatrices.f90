@@ -83,6 +83,7 @@ program hmatrices
 contains
 
 	subroutine lowrankcall(currarg)
+		type(Matrix), pointer :: A,B
 		character(len=8) :: cmd
 		integer :: currarg
 		integer :: i, rank
@@ -95,20 +96,28 @@ contains
 			call getarg(currarg, cmd)
 			currarg = currarg+1
 			read(cmd,*) rank
-			call lowrank(rank=rank)
+			call matrixReader(A)
+			call lowrank(A, B, rank=rank)
 		case ('epsabs')
 			call getarg(currarg, cmd)
 			currarg = currarg+1
 			read(cmd,*) eps
+			call matrixReader(A)
+			call lowrank(A, B, rank=rank)
 			call lowrank(epsabs=eps)
 		case ('epsrel')
 			call getarg(currarg, cmd)
 			currarg = currarg+1
 			read(cmd,*) eps
+			call matrixReader(A)
+			call lowrank(A, B, rank=rank)
 			call lowrank(epsrel=eps)
 		case default
 			call help()
 		end select
+
+		call M_dealloc(A)
+		call M_dealloc(B)
 	
 	end subroutine
 
