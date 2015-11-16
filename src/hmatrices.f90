@@ -108,7 +108,7 @@ contains
 	end subroutine
 
 	subroutine M_dealloc(A)
-		type(Matrix) :: A
+		type(Matrix), pointer :: A
 
 		if (A%pointU) then
 			nullify(A%Ut)
