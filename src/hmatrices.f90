@@ -47,13 +47,13 @@ program hmatrices
 		call M_dealloc(A)
 		call M_dealloc(B)
 	case('lowrank')
-		call lowrankcall(nbarg)
+		call lowrankcall(currarg)
 	case('matprod')
 		call matrixReader(A)
 		call matrixReader(B)
 
 		call matprod(A,B,C)
-		
+
 		call matrixWriter(C)
 
 		call M_dealloc(A)
@@ -82,33 +82,32 @@ program hmatrices
 
 contains
 
-	subroutine lowrankcall(nbarg)
-		character(len=8) :: currarg, arg1, arg2, arg3
-		integer, intent(in) :: nbarg
+	subroutine lowrankcall(currarg)
+		character(len=8) :: cmd
+		integer, intent(in) :: currarg
 		integer :: i, rank
-		double precision :: epsabs, epsrel
+		double precision :: eps
 		
-		if (mod(nbarg,2) == 0) then
-			call wrongArg()
-			return
-		endif
-		
-		call getarg(2,currarg)
-		select case(currarg)
+		call getarg(currarg,cmd)
+		currarg = currarg+1
+		select case(cmd)
 		case ('rank')
-			call getarg(3, currarg)
+			call getarg(currarg, currarg)
+			currarg = currarg+1
 			read(currarg,*) rank
 			call lowrank(rank=rank)
 		case ('epsabs')
-			call getarg(3, currarg)
-			read(currarg,*) epsabs
-			call lowrank(epsabs=epsabs)
+			call getarg(currarg, currarg)
+			currarg = currarg+1
+			read(currarg,*) eps
+			call lowrank(epsabs=eps)
 		case ('epsrel')
-			call getarg(3, currarg)
-			read(currarg,*) epsrel
-			call lowrank(epsrel=epsrel)
+			call getarg(currarg, currarg)
+			currarg = currarg+1
+			read(currarg,*) eps
+			call lowrank(epsrel=eps)
 		case default
-			call wrongArg()
+			call help()
 		end select
 	
 	end subroutine
