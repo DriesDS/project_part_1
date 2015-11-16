@@ -46,13 +46,15 @@ contains
 		k = size(B%Ut,2)
 		alpha = 1.0
 		beta = 0.0
+
 		allocate(C)
 		C%full = B%full
+		C%pointU = .false.
 		allocate(C%Ut(m,n))
 
 		if (.not. C%full) then
-			allocate(C%Vt(size(B%Vt,1),size(B%Vt,2)))
-			C%Vt = B%Vt
+			C%pointV = .true.
+			C%Vt => B%Vt
 		endif
 		
 		!write(*,*) 'DEBUGGING INFORMATION'
@@ -86,9 +88,10 @@ contains
 
 		allocate(C)
 		C%full = .false.
+		C%pointU = .true.
+		C%pointV = .false.
 		allocate(C%Vt(m,n))
-		allocate(C%Ut(size(A%Ut,1),size(A%Ut,2)))
-		C%Ut = A%Ut
+		C%Ut => A%Ut
 		
 		!write(*,*) 'C allocated, C%Ut = ', size(C%Ut,1),',',size(C%Ut,2), &
 		!		'C%Vt = ', size(C%Vt,1),',',size(C%Vt,2)
@@ -134,15 +137,17 @@ contains
 		C%full = .false.
 		if (Asmallest) then
 			n2 = size(B%Vt,2)
-			allocate(C%Ut(size(A%Ut,1),size(A%Vt,2)))
+			C%pointU = .true.
+			C%pointV = .false.
 			allocate(C%Vt(n,size(B%Vt,2)))
-			C%Ut = A%Ut
+			C%Ut => A%Ut
 			call dgemm('T','N', n, n2, m, alpha, tempM, m, B%Vt, m, beta, C%Vt, n)
 		else
 			n2 = size(A%Vt,2)
 			allocate(C%Ut(m,n2))
-			allocate(C%Vt(size(B%Vt,1),size(B%Vt,2)))
-			C%Vt = B%Vt
+			C%pointU = .false.
+			C%pointV = .true.
+			C%Vt => B%Vt
 			call dgemm('N','N', m, n2, n, alpha, tempM, m, A%Ut, n, beta, C%Ut, m)
 		endif
 		

@@ -39,8 +39,11 @@ program hmatrices
 		call test()
 	case('full')
 		call matrixReader(A)
+
 		call full(A,B)
+
 		call matrixWriter(B)
+
 		call M_dealloc(A)
 		call M_dealloc(B)
 	case('lowrank')
@@ -48,8 +51,11 @@ program hmatrices
 	case('matprod')
 		call matrixReader(A)
 		call matrixReader(B)
+
 		call matprod(A,B,C)
+		
 		call matrixWriter(C)
+
 		call M_dealloc(A)
 		call M_dealloc(B)
 		call M_dealloc(C)
