@@ -11,8 +11,6 @@ type Matrix
 	logical :: full
 	logical :: pointU, pointV
 	double precision, pointer :: Ut(:,:), Vt(:,:)
-	pointU = .false.
-	pointV = .false.
 end type
 
 contains
@@ -46,6 +44,8 @@ contains
 		integer :: row
 		
 		allocate(matp)
+		matp%pointU = .false.
+		matp%pointV = .false.
 		matp%full = .true.
 		allocate(matp%Ut(cols, rows))
 		do row = 1,rows
@@ -62,6 +62,8 @@ contains
 		integer :: row, col
 		
 		allocate(matp)
+		matp%pointU = .false.
+		matp%pointV = .false.
 		matp%full = .false.
 		allocate(matp%Ut(rank, rows))
 		allocate(matp%Vt(rank, cols))

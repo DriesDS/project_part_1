@@ -17,6 +17,8 @@ contains
 		if (A%full) then
 			allocate(B)
 			B%full = .true.
+			B%pointU = .true.
+			B%pointV = .false.
 			B%Ut => A%Ut
 			!allocate(B%Ut(1,1))
 			!B%Ut(1,1) = 1

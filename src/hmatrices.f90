@@ -41,11 +41,8 @@ program hmatrices
 		call matrixReader(A)
 		call full(A,B)
 		call matrixWriter(B)
-		deallocate(A%Ut)
-		if (associated(B%Ut)) deallocate(B%Ut)
-		if (allocated(A%Vt)) deallocate(A%Vt)
-		if (associated(B%Vt)) deallocate(B%Vt)
-		deallocate(A,B)
+		call M_dealloc(A)
+		call M_dealloc(B)
 	case('lowrank')
 		call lowrankcall(nbarg)
 	case('matprod')
@@ -53,11 +50,9 @@ program hmatrices
 		call matrixReader(B)
 		call matprod(A,B,C)
 		call matrixWriter(C)
-		deallocate(A%Ut, B%Ut, C%Ut)
-		if (associated(A%Vt)) deallocate(A%Vt)
-		if (associated(B%Vt)) deallocate(B%Vt)
-		if (associated(C%Vt)) deallocate(C%Vt)
-		deallocate(A,B,C)
+		call M_dealloc(A)
+		call M_dealloc(B)
+		call M_dealloc(C)
 	case('makeGFull')
 		call getarg(currarg,cmd)
 		read(cmd,*) N
@@ -110,6 +105,27 @@ contains
 			call wrongArg()
 		end select
 	
+	end subroutine
+
+	subroutine M_dealloc(A)
+		type(Matrix) :: A
+
+		if (A%pointU) then
+			nullify(A%Ut)
+		else
+			deallocate(A%Ut)
+		endif
+
+		if (.not.A%full) then
+			if (A%pointV) then
+				nullify(A%Vt)
+			else
+				deallocate(A%Vt)
+			endif
+		endif
+
+		deallocate(A)
+
 	end subroutine
 
 end program
