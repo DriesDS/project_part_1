@@ -32,6 +32,7 @@ contains
 
 			allocate(B)
 			B%full = .true.
+			B%pointU = .false.
 			allocate(B%Ut(m,n))
 
 			call dgemm('T','N',m,n,k,alpha,A%Vt,k,A%Ut,k,beta,B%Ut,m)

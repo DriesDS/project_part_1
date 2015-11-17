@@ -47,7 +47,7 @@ program hmatrices
 		call M_dealloc(A)
 		call M_dealloc(B)
 	case('lowrank')
-		call lowrankcall(currarg)
+		call lowrankcall(A, B, currarg)
 	case('matprod')
 		call matrixReader(A)
 		call matrixReader(B)
@@ -62,12 +62,17 @@ program hmatrices
 	case('makeGFull')
 		call getarg(currarg,cmd)
 		read(cmd,*) N
-		call makeGFull(B,N)
-		call matrixWriter(B)
+		call makeGFull(A,N)
+		call matrixWriter(A)
+		call M_dealloc(A)
 	case('solveIntFull')
 		call getarg(2,cmd)
 		read(cmd,*) N
-		call solveIntFull(N)
+		call matrixReader(B)
+		call solveIntFull(A, B, N)
+		call matrixWriter(A)
+		call M_dealloc(A)
+		call M_dealloc(B)
 	case('plotField')
 		call plotField()
 	case('readtest')
@@ -82,39 +87,34 @@ program hmatrices
 
 contains
 
-	subroutine lowrankcall(currarg)
+	subroutine lowrankcall(A, B, currarg)
 		type(Matrix), pointer :: A,B
-		character(len=8) :: cmd
+		character(len=24) :: cmd, value
 		integer :: currarg
-		integer :: i, rank
+		integer :: i, rank, effrank
 		double precision :: eps
 		
 		call getarg(currarg,cmd)
 		currarg = currarg+1
+		call getarg(currarg,value)
+		currarg = currarg+1
+
+		call matrixReader(A)
 		select case(cmd)
 		case ('rank')
-			call getarg(currarg, cmd)
-			currarg = currarg+1
-			read(cmd,*) rank
-			call matrixReader(A)
-			call lowrank(A, B, rank=rank)
+			read(value,*) rank
+			call lowrank(A, B, effrank, rank=rank)
 		case ('epsabs')
-			call getarg(currarg, cmd)
-			currarg = currarg+1
-			read(cmd,*) eps
-			call matrixReader(A)
-			call lowrank(A, B, rank=rank)
-			call lowrank(epsabs=eps)
+			read(value,*) eps
+			call lowrank(A, B, effrank, epsabs=eps)
 		case ('epsrel')
-			call getarg(currarg, cmd)
-			currarg = currarg+1
-			read(cmd,*) eps
-			call matrixReader(A)
-			call lowrank(A, B, rank=rank)
-			call lowrank(epsrel=eps)
+			read(value,*) eps
+			call lowrank(A, B, effrank, epsrel=eps)
 		case default
 			call help()
 		end select
+
+		call matrixWriter(B, effrank)
 
 		call M_dealloc(A)
 		call M_dealloc(B)

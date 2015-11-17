@@ -71,7 +71,7 @@ contains
 			read(inunit,*) elems
 			matp%Ut(:,row) = elems
 		enddo
-		read(*,*)
+		read(inunit,*)
 		do col = 1,cols
 			read(inunit,*) elems
 			matp%Vt(:,col) = elems
@@ -89,7 +89,6 @@ contains
 		prec = 16
 		outunit = defaultout
 		if (present(optoutunit)) then
-			write(*,*) 'her is the fault'
 			outunit = optoutunit
 		endif
 
