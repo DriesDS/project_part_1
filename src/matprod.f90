@@ -7,16 +7,10 @@ implicit none
 contains
 
 	subroutine matprod(A, B, C)
-		integer :: n
 		type(Matrix), pointer, intent(in) :: A, B
 		type(Matrix), pointer, intent(inout) :: C
 		
-		!call matrixReader(A)
-		!call matrixReader(B)
-
-		!write(*,*) 'in matprod, matrices readed in'
 		if (A%full) then
-			!write(*,*) 'going to leftfullprod()'
 			call leftfullprod(A, B, C)
 		else
 			if (B%full) then
@@ -26,8 +20,6 @@ contains
 			endif
 		endif
 
-		!deallocate(A)
-		!deallocate(B)
 	end subroutine
 	
 	subroutine leftfullprod(A, B, C)
@@ -57,15 +49,7 @@ contains
 			C%Vt => B%Vt
 		endif
 		
-		!write(*,*) 'DEBUGGING INFORMATION'
-		!write(*,*) 'size of A%Ut: ', size(A%Ut,1), ',', size(A%Ut,2)
-		!write(*,*) 'size of B%Ut: ', size(B%Ut,1), ',', size(B%Ut,2)
-		
 		call dgemm('N','N', m, n, k, alpha, B%Ut, m, A%Ut, k, beta, C%Ut, m)
-
-		!call matrixWriter(C)
-		
-		!deallocate(C)
 
 	end subroutine
 	
@@ -92,19 +76,8 @@ contains
 		C%pointV = .false.
 		allocate(C%Vt(m,n))
 		C%Ut => A%Ut
-		
-		!write(*,*) 'C allocated, C%Ut = ', size(C%Ut,1),',',size(C%Ut,2), &
-		!		'C%Vt = ', size(C%Vt,1),',',size(C%Vt,2)
-		
-		!write(*,*) 'DEBUGGING INFORMATION'
-		!write(*,*) 'size of A%Ut: ', size(A%Ut,1), ',', size(A%Ut,2)
-		!write(*,*) 'size of B%Ut: ', size(B%Ut,1), ',', size(B%Ut,2)
-		
+				
 		call dgemm('N','T', m, n, k, alpha, A%Vt, m, B%Ut, n, beta, C%Vt, m)
-
-		!call matrixWriter(C)
-		
-		!deallocate(C)
 
 	end subroutine
 	
@@ -151,15 +124,6 @@ contains
 			call dgemm('N','N', m, n2, n, alpha, tempM, m, A%Ut, n, beta, C%Ut, m)
 		endif
 		
-		!write(*,*) 'DEBUGGING INFORMATION'
-		!write(*,*) 'size of A%Ut: ', size(A%Ut,1), ',', size(A%Ut,2)
-		!write(*,*) 'size of B%Ut: ', size(B%Ut,1), ',', size(B%Ut,2)
-		!write(*,*) 'size of tempM: ', size(tempM,1), ',', size(tempM,2)
-
-		!call matrixWriter(C)
-		
-		!deallocate(C)
-
 	end subroutine
 
 end module

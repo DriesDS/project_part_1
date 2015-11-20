@@ -12,16 +12,12 @@ contains
 		type(Matrix), pointer, intent(inout) :: B
 		double precision :: alpha, beta
 
-		!call matrixReader(A)
-
 		if (A%full) then
 			allocate(B)
 			B%full = .true.
 			B%pointU = .true.
 			B%pointV = .false.
 			B%Ut => A%Ut
-			!allocate(B%Ut(1,1))
-			!B%Ut(1,1) = 1
 		else
 			! B^t = A%Vt^t * A%Ut
 			m = size(A%Vt,2)
@@ -37,10 +33,7 @@ contains
 
 			call dgemm('T','N',m,n,k,alpha,A%Vt,k,A%Ut,k,beta,B%Ut,m)
 
-			!call matrixWriter(B)
 		endif
-
-		!deallocate(B)
 
 	end subroutine
 

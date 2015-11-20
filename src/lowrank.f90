@@ -11,16 +11,15 @@ contains
 	! we weten dus dat A = Vt^t*S*U^t
 	! We moeten dus Vt opslaan in A%Ut en U^t in A%Vt
 	
-	subroutine lowrank(A, B, effrank, rank, epsabs, epsrel)
+	subroutine lowrank(A, B, rank, epsabs, epsrel)
 		double precision, optional :: epsrel, epsabs
 		integer, optional :: rank
-		integer :: m, n, lda, ldu, ldvt, lwork, info, k, s, r, effrank
+		integer :: m, n, lwork, info, s, r
 		character :: jobu, jobvt
-		double precision, pointer :: dummy(:,:)
 		double precision, dimension(:), allocatable :: Sigma, work
 		double precision :: rc
 		type(Matrix), pointer, intent(inout) :: A, B
-		type(Matrix), pointer :: dump, fullm
+		type(Matrix), pointer :: dump
 
 		if (.not.A%full) then
 			call full(A,dump)
@@ -32,10 +31,6 @@ contains
 			deallocate(dump)
 		endif
 
-! 		if (present(rank)) write(*,*) 'rank: ', rank
-! 		if (present(epsrel)) write(*,*) 'epsrel: ', epsrel
-! 		if (present(epsabs)) write(*,*) 'epsabs: ', epsabs
-		!call matrixReader(A)
 		m = size(A%Ut,1)
 		n = size(A%Ut,2)
 		allocate(Sigma(min(m,n)))
@@ -55,17 +50,13 @@ contains
 		else
 			jobu = 'O' !use O for storing in A
 			jobvt = 'S'
-			!call matrixWriter(A)
 			allocate(A%Vt(n,n))
 			A%full = .false.
 			call dgesvd(jobu, jobvt, m, n, A%Ut, m, Sigma, A%Ut, m, A%Vt, n, work, lwork, info)
-			!call matrixWriter(A)
 		endif
-		
-		!write(*,*) 'Sigma: ',Sigma
+
 		r = 0
 		if (present(epsrel)) then
-			!write(*,*) 'epsrel: ', epsrel
 			do s = 1,min(m,n)
 				if (Sigma(s)>Sigma(1)*epsrel) r=r+1
 			enddo
@@ -112,14 +103,9 @@ contains
 		do s = 1,r
 			B%Ut(s,:) = B%Ut(s,:)*Sigma(s)
 		enddo
-
-		effrank = r
-		
-! 		call matrixWriter(B,r)
-		
+				
 		deallocate(work, Sigma)
-! 		deallocate(A,B)
-		
+
 	end subroutine
 
 end module

@@ -1,0 +1,12 @@
+set terminal pdf enhanced;
+set output 'loglog.out';
+
+set logscale;
+set key left top;
+set xlabel 'rank';
+set ylabel 'time';
+
+# Example of plotting two data files "float" and "double" on same graph:
+plot "timings.out" using 1:2 with linespoint title "time";#, \
+#		"timings.out" using 1:3 with linespoint title "rank-10";
+

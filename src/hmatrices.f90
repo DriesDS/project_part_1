@@ -8,25 +8,23 @@ program hmatrices
 	use makeGFullmod
 	use solveIntFullmod
 	use plotFieldmod
-	use wrongArgmod
-	use readtestmod
-	
+
 	implicit none
-	
+
 	type(Matrix), pointer :: A,B,C
-	integer :: nbarg, currarg, N
+	integer :: currarg, N
 	character(len=16) :: cmd
 	logical :: timing
+	double precision :: start, total_time
 
 	currarg = 1
 	timing = .false.
 
 	call getarg(currarg,cmd)
 	currarg = currarg+1
-	nbarg = iargc()
 
 	if (cmd == '-t') then
-		!start timing
+		call CPU_TIME(start)
 		call getarg(currarg,cmd)
 		currarg = currarg+1
 		timing = .true.
@@ -66,7 +64,8 @@ program hmatrices
 		call matrixWriter(A)
 		call M_dealloc(A)
 	case('solveIntFull')
-		call getarg(2,cmd)
+		call getarg(currarg,cmd)
+		currarg = currarg+1
 		read(cmd,*) N
 		call matrixReader(B)
 		call solveIntFull(A, B, N)
@@ -74,15 +73,20 @@ program hmatrices
 		call M_dealloc(A)
 		call M_dealloc(B)
 	case('plotField')
-		call plotField()
-	case('readtest')
-		call readtest()
+		call getarg(currarg,cmd)
+		currarg = currarg+1
+		read(cmd,*) N
+		call matrixReader(B)
+		call plotField(B,N)
+		call M_dealloc(B)
 	case default
-		call wrongArg()
+		call help()
 	end select
 
 	if (timing) then
-		! stop timing
+		call CPU_TIME(total_time)
+		total_time = total_time-start
+		write(0,*) 'CPU_TIME: ', total_time
 	endif
 
 contains
@@ -91,7 +95,7 @@ contains
 		type(Matrix), pointer :: A,B
 		character(len=24) :: cmd, value
 		integer :: currarg
-		integer :: i, rank, effrank
+		integer :: rank
 		double precision :: eps
 		
 		call getarg(currarg,cmd)
@@ -103,43 +107,22 @@ contains
 		select case(cmd)
 		case ('rank')
 			read(value,*) rank
-			call lowrank(A, B, effrank, rank=rank)
+			call lowrank(A, B, rank=rank)
 		case ('epsabs')
 			read(value,*) eps
-			call lowrank(A, B, effrank, epsabs=eps)
+			call lowrank(A, B, epsabs=eps)
 		case ('epsrel')
 			read(value,*) eps
-			call lowrank(A, B, effrank, epsrel=eps)
+			call lowrank(A, B, epsrel=eps)
 		case default
-			call help()
+			call lowrank(A, B)
 		end select
 
-		call matrixWriter(B, effrank)
+		call matrixWriter(B)
 
 		call M_dealloc(A)
 		call M_dealloc(B)
 	
-	end subroutine
-
-	subroutine M_dealloc(A)
-		type(Matrix), pointer :: A
-
-		if (A%pointU) then
-			nullify(A%Ut)
-		else
-			deallocate(A%Ut)
-		endif
-
-		if (.not.A%full) then
-			if (A%pointV) then
-				nullify(A%Vt)
-			else
-				deallocate(A%Vt)
-			endif
-		endif
-
-		deallocate(A)
-
 	end subroutine
 
 end program

@@ -10,7 +10,7 @@ type Matrix
 	! when the matrix is full, only Ut will be used
 	logical :: full
 	logical :: pointU, pointV
-	double precision, pointer :: Ut(:,:), Vt(:,:)
+	double precision, pointer :: Ut(:,:) => null() , Vt(:,:) => null()
 end type
 
 contains
@@ -81,7 +81,7 @@ contains
 	subroutine matrixWriter(matpu, rank, optoutunit)
 		type(Matrix), pointer :: matpu
 		integer, optional, intent(in) :: rank, optoutunit
-		integer :: row, col, rows, cols, rank_k, outunit, dig, prec
+		integer :: row, rows, cols, rank_k, outunit, dig, prec
 		character(len=32) :: header
 		character(len=32) :: fmtstr
 
@@ -119,72 +119,24 @@ contains
 		write(outunit,*)
 	end subroutine
 
-	subroutine lowlevelwriter(U, jobU, V, jobV, rank, optoutunit)
-		double precision, intent(in) :: U(:,:)
-		double precision, optional, intent(in) :: V(:,:)
-		character :: jobU
-		character, optional :: jobV
-		character(len=32) :: header
-		integer, optional, intent(in) :: optoutunit, rank
-		integer :: outunit, rows, cols, row, col, r
-		logical :: full
-		
-		full = .true.
-		if (present(V) .and. present(jobV)) full = .false.
-		outunit = defaultout
-		if (present(optoutunit)) outunit = optoutunit
-		
-		if (full) then
-			if (jobU == 'T' .or. jobU == 't') then
-				rows = size(U,2)
-				cols = size(U,1)
-			else
-				rows = size(U,1)
-				cols = size(U,2)
-			endif
-			write(header,'(a,i0,a,i0,a)') 'full matrix [', rows, ' x ', cols, ']'
-		else
-			if (jobU == 'T' .or. jobV == 't') then
-				rows = size(U,2)
-				r = size(U,1)
-			else
-				rows = size(U,1)
-				r = size(U,2)
-			endif
-			if (present(rank)) r = rank
-			if (jobV == 'T' .or. jobV == 't') then
-				cols = size(V,1)
-			else
-				cols = size(V,2)
-			endif
+	subroutine M_dealloc(A)
+		type(Matrix), pointer :: A
 
-			write(header,'(a,i0,a,i0,a,i0,a)') 'rank-', r, ' matrix [', rows, ' x ', cols, ']'
+		if (A%pointU) then
+			nullify(A%Ut)
+		else
+			deallocate(A%Ut)
 		endif
 
-		write(outunit,'(a)') trim(header)
-		
-		if (jobU == 'T' .or. jobU == 't') then
-			do row = 1,rows
-				write(outunit,*) U(:r,row)
-			enddo
-		else
-			do row = 1,rows
-				write(outunit,*) U(row,:r)
-			enddo
-		endif
-		if (.not. full) then
-			write(outunit,*) separationstr
-			if (jobV == 'T' .or. jobV == 't') then
-				do col = 1,cols
-					write(outunit,*) V(:r,col)
-				enddo
+		if (.not.A%full) then
+			if (A%pointV) then
+				nullify(A%Vt)
 			else
-				do col = 1,cols
-					write(outunit,*) V(col,:r)
-				enddo
+				deallocate(A%Vt)
 			endif
 		endif
-		write(outunit,*)
+
+		deallocate(A)
 
 	end subroutine
 

@@ -20,18 +20,18 @@ contains
 		forall (i=1:N) B(i,1) = cos(2d0*i*pi/N)
 		IPIV = 0
 		
-		call dgetrf(N,N,A,N,IPIV,info)
-		call dgetrs('N', N, 1, A, N, IPIV, B, N, info)
+		call dgesv(N,1,A,N,IPIV,B,N,info)
 
 		allocate(U)
 		U%full = .true.
 		U%pointU = .false.
-		allocate(U%Ut(size(X%Ut,2),1))
+		allocate(U%Ut(size(X%Ut,1),1))
 
 		U%Ut = 0
-		do i=1,size(U%Ut,2)
+		do i=1,size(U%Ut,1)
 			do j=1,N
-				U%Ut(i,1) = U%Ut(i,1)-B(j,1)*1d0/2*log(1d0+X%Ut(j,1)**2+X%Ut(j,2)**2-2d0*(X%Ut(j,1)*cos((2d0*j+1)*pi/N)+X%Ut(j,2)*sin((2d0*j+1)*pi/N)))
+				U%Ut(i,1) = U%Ut(i,1)-B(j,1)*1d0/2*log(1d0+X%Ut(i,1)**2+X%Ut(i,2)**2 &
+					-2d0*(X%Ut(i,1)*cos((2d0*j-1)*pi/N)+X%Ut(i,2)*sin((2d0*j-1)*pi/N)))
 			enddo
 		enddo
 
