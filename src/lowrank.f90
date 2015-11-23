@@ -54,7 +54,7 @@ contains
 			A%full = .false.
 			call dgesvd(jobu, jobvt, m, n, A%Ut, m, Sigma, A%Ut, m, A%Vt, n, work, lwork, info)
 		endif
-
+		write(*,*) Sigma
 		r = 1
 		if (present(epsrel)) then
 			do s = 2,min(m,n)
