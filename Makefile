@@ -6,10 +6,10 @@ objects = help.o test.o full.o lowrank.o matprod.o makeGFull.o solveIntFull.o pl
 modules = helpmod.mod testmod.mod fullmod.mod lowrankmod.mod matprodmod.mod makegfullmod.mod solveintfullmod.mod plotfieldmod.mod matrixconverter.mod
 
 # Eventuele compilatievlaggen per compiler
-FFLAGS_g95      = -g -pedantic -Wall -fbounds-check -ftrace=full
-FFLAGS_gfortran = -lblas -llapack#-g -pedantic -Wall -Wimplicit-interface -Wunderflow -fbounds-check -fimplicit-none
-FFLAGS_ifort    = -lblas -llapack#-g -debug full -implicitnone -check -warn -free -Tf
-FFLAGS_nagfor   = -g -C=all -gline -u -info -colour -kind=byte
+FFLAGS_g95      = -O3
+FFLAGS_gfortran = -O3 #-g -pedantic -Wall -Wimplicit-interface -Wunderflow -fbounds-check -fimplicit-none
+FFLAGS_ifort    = -O3 #-g -debug full -implicitnone -check -warn -free -Tf
+FFLAGS_nagfor   = -O3 #-g -C=all -gline -u -info -colour -kind=byte
 
 options = -lblas -llapack 
 

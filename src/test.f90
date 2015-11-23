@@ -248,8 +248,8 @@ contains
 		X%full = .true.
 		X%pointU = .false.
 		allocate(X%Ut(1,2))
-		X%Ut(1,1) = 0.7
-		X%Ut(1,2) = -0.9
+		X%Ut(1,1) = 0.9
+		X%Ut(1,2) = -0.7
 
 		call solveIntFull(G,X,N)
 		write(*,'(t10, e15.3,t40,"  <-- This should be around 0.712")') G%Ut(1,1)
