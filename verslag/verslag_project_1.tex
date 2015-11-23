@@ -9,7 +9,7 @@
 
 \title{Technisch Wetenschappelijke Software: Project deel 1}
 \author{Dries De Samblanx}
-\date{dindag 20 november 2015}
+\date{maandag 23 november 2015}
 
 \newcommand{\opgave}[1]{\section*{Opgave #1}}
 \newcommand{\dx}{\Delta x}
@@ -76,10 +76,12 @@ Hieraan kunnen we ook zien dat alle kolommen van deze matrix kopie\"en zijn van 
 	u_N(x) = -\sum_{j=0}^{N-1} 0.5c_jln(1+x_1^2+x_2^2 &-2x_1cos(2\pi (j+0.5)/N)\\&-2x_2sin(2\pi (j+0.5)/N))
 \end{aligned}
 \end{equation}
-Op deze manier proberen we de effici\"entie en nauwkeurigheid van het opstellen van de matrix A en de vector u te verbeteren.
+Op deze manier proberen we de effici\"entie en nauwkeurigheid van het opstellen van de matrix A en de vector u te verbeteren. \\
+Het oplossen van het stelsel voor SolveIntFull kan problemen geven aangezien het stelsel singulier is voor even waarden van N. Dit leidt niet direct tot foute waarden van de sommatie, maar de nauwkeurigheid is heel wat slechter. Een oplossing hiervoor zou zijn om enkel oneven waarden van N te gebruiken.
 
-\subsection*{tests}
-Bij het uitvoeren van de tests voor het bepalen van de twee reeksen ontstaan er problemen bij het dealloceren van matrices. Door het gebruik van valgrind is het duidelijk dat er bij enkele bewerkingen geen geheugenlekken aanwezig zijn. Bij de tests worden echter dezelfde matrices gebruikt voor meerdere achtereenvolgende bewerkingen op te doen. Wanneer ik hier probeer om de matrices te deallocaren komen er fouten naar boven. Wanneer er print statements staan tussen elke regel in de functie \verb! M_dealloc! in het bestand \(matrixConverter.f90\) geeft hij weer dat de matrix gealloceerd is, maar geeft hij een error omdat hij een matrix geen twee keer kan dealloceren. Dit probleem toont zich nooit wanneer er telkens maar \'e\'en bewerking gebeurt via de command line, dus een eenvoudige oplossing om rond dit probleem te werken zou zijn om de tests zo te schrijven dat alles via de command line gebeurt. Omdat de matrices voor de tests echter niet zo groot zijn en omdat dit probleem zich niet voordoet bij bewerkingen via de command line heb ik deze implementatie niet verandert zodat er wel geheugenlekken zijn bij het uitvoeren van de tests.
+\subsection*{tests en compilatie}
+Bij het uitvoeren van de tests voor het bepalen van de twee reeksen ontstaan er problemen bij het dealloceren van matrices. Door het gebruik van valgrind is het duidelijk dat er bij enkele bewerkingen geen geheugenlekken aanwezig zijn. Bij de tests worden echter dezelfde matrices gebruikt voor meerdere achtereenvolgende bewerkingen op te doen. Wanneer ik hier probeer om de matrices te deallocaren komen er fouten naar boven. Wanneer er print statements staan tussen elke regel in de functie \verb! M_dealloc! in het bestand \(matrixConverter.f90\) geeft hij weer dat de matrix gealloceerd is, maar geeft hij een error omdat hij een matrix geen twee keer kan dealloceren. Dit probleem toont zich nooit wanneer er telkens maar \'e\'en bewerking gebeurt via de command line, dus een eenvoudige oplossing om rond dit probleem te werken zou zijn om de tests zo te schrijven dat alles via de command line gebeurt. Omdat de matrices voor de tests echter niet zo groot zijn en omdat dit probleem zich niet voordoet bij bewerkingen via de command line heb ik deze implementatie niet verandert zodat er wel geheugenlekken zijn bij het uitvoeren van de tests. \\
+De compilatie verloopt goed met alle compilers buiten Nagfor. Deze geeft problemen met de functie getarg. Dit kan ermee te maken hebben dat Nagfor extra bibliotheken nodig heeft voor communicatie met het systeem. De gebruikte vlaggen voor de overige compilers zijn -O3 om het compileren van de code te optimalizeren en -lblas en -llapack in de laatste stap bij het linken om de compiler te vertellen dat sommige methodes uit deze bibliotheken gebruikt zijn.
 
 \subsection*{tijdsbesteding}
 
@@ -127,7 +129,7 @@ De tijdsbesteding voor dit project verdeeld onder de voornaamste onderdelen is w
 \label{o3complex}
 \end{figure}
 
-zoals te zien op Figuur \ref{o3complex} is zowel het product van twee volledige matrices als het berekenen van een lowrank matrix met een gegeven volledige matrix \(O(n^3)\). Dit is zoals de verwachtingen. Als we beide figuren met elkaar vergelijken kunnen we ook opmerken dat het berekenen van een lagere rang matrix meer tijd vraagt als het product nemen van twee volledige matrices. Dit wil zeggen dat wanneer we twee matrices willen vermenigvuldigen het weinig zinvol is om eerst een lagere rang matrix te berekenen. Het nut hiervan wordt pas bereikt wanneer we meerdere bewerkingen moeten doen met deze matrix. Daarnaast kunnen we vermelden dat de rekentijd van het berekenen van een lagere rang matrix onafhankelijk is van de rang waarin we ge\"interesseerd zijn. Dit komt omdat we telkens de volledige SVD berekenen met \(O(n^3)\) rekencomplexiteit.
+zoals te zien op Figuur \ref{o3complex} is zowel het product van twee volledige matrices als het berekenen van een lowrank matrix met een gegeven volledige matrix \(O(n^3)\). Dit is zoals de verwachtingen. Als we beide figuren met elkaar vergelijken kunnen we ook opmerken dat het berekenen van een lagere rang matrix meer tijd vraagt dan het product nemen van twee volledige matrices. Dit wil zeggen dat wanneer we twee matrices willen vermenigvuldigen het weinig zinvol is om eerst een lagere rang matrix te berekenen. Het nut hiervan wordt pas bereikt wanneer we meerdere bewerkingen moeten doen met deze matrix. Daarnaast kunnen we vermelden dat de rekentijd van het berekenen van een lagere rang matrix onafhankelijk is van de rang waarin we ge\"interesseerd zijn. Dit komt omdat we telkens de volledige SVD berekenen met \(O(n^3)\) rekencomplexiteit.
 
 \begin{figure}
 \centering
@@ -136,14 +138,14 @@ zoals te zien op Figuur \ref{o3complex} is zowel het product van twee volledige 
 	\label{rankfullplot}
 \end{figure}
 
-Op Figuur \ref{rankfull} is de rekentijd afgebeeld van het matrix-matrix product met eventueel gebruik van rank-k matrices. Het product is altijd genomen van twee 1000 op 1000 matrices. De tijd wordt over het algemeen vooral bepaald door het aantal geheugentoegangen, maar bij het product van matrices is dit aantal geheugentoegangen over het algemeen evenredig met het aantal scalaire vermenigvuldigenen. Daarom zullen we dit aantal vermenigvuldigingen gebruiken om een schatting te maken van de rekencomplexiteit. Bij het product van een MxN matrix met een NxP matrix verwachten moeten MxP elementen berekend worden doormiddel van N vermenigvuldigingen. We verwachten dus complexiteit MxNxP wat zich herleid tot de \(O(n^3)\) zoals te zien in Figuur \ref{o3complex}.
+Op Figuur \ref{rankfullplot} is de rekentijd afgebeeld van het matrix-matrix product met eventueel gebruik van rank-k matrices. Het product is altijd genomen van twee 1000 op 1000 matrices. De tijd wordt over het algemeen vooral bepaald door het aantal geheugentoegangen, maar bij het product van matrices is dit aantal geheugentoegangen over het algemeen evenredig met het aantal scalaire vermenigvuldigenen. Daarom zullen we dit aantal vermenigvuldigingen gebruiken om een schatting te maken van de rekencomplexiteit. Bij het product van een MxN matrix met een NxP matrix verwachten moeten MxP elementen berekend worden doormiddel van N vermenigvuldigingen. We verwachten dus complexiteit MxNxP wat zich herleid tot de \(O(n^3)\) zoals te zien in Figuur \ref{o3complex}.
 \begin{equation}
 \label{fullfull}
 \begin{aligned}
 	full*full \sim O(M\times N\times P)
 \end{aligned}
 \end{equation}
-Wanneer we het product nemen van een MxN matrix van rank K met een NxP volledige matrix moet er enkel een vermenigvuldiging gedaan worden van een KxN en een NxP matrix. Dit herleid zich tot een complexiteit van KxNxP zoals te zien in de lineaire afhankelijkheid van het rank*full matrix product in Figuur \ref{rankfull}.
+Wanneer we het product nemen van een MxN matrix van rank K met een NxP volledige matrix moet er enkel een vermenigvuldiging gedaan worden van een KxN en een NxP matrix. Dit herleid zich tot een complexiteit van KxNxP zoals te zien in de lineaire afhankelijkheid van het rank*full matrix product in Figuur \ref{rankfullplot}.
 \begin{equation}
 \label{rankfull}
 \begin{aligned}
@@ -178,11 +180,12 @@ Wanneer men berekeningen gaat maken met rank-k benaderingen in plaats van met de
 Zoals aangetoond in de resultaten is het berekenen van een matrix-matrix product van een volledige met een rank-k benadering altijd voordeliger. Ook het resultaat van deze bewerking zal verkregen worden in de vorm van een rank-k matrix, dus wanneer hier verdere berekeningen mee gemaakt moeten worden kunnen ook deze gemaakt worden met een rank-k benadering. Dit is een voordeel maar wanneer men de rekentijden vergelijkt ziet men dat er toch al meer dan tien bewerkingen gedaan moeten worden met rank matrices om de kost te compenseren voor het maken van deze benadering.
 
 \subsection*{geheugen}
-Waar het geheugen van een volle matrix 8bytes*M*N bedraagt, is dat van een rank-k benadering van deze matrix 8bytes*(M*k+N*k). Hieruit valt gemakkelijk af te leiden dat $k<\frac{mn}{m+n}$ en in het geval van M=N $k<M/2$. Om veel voordeel uit het geheugen te halen moet $k\ll min(M,N)$. Dit kan ten nadele zijn van de nauwkeurigheid van de berekeningen, maar in het geval van grote matrices kan dit nodig zijn om de berekeningen te kunnen uitvoeren. Wanneer men echter werkt met gaussiaans verdeelde ongecorreleerde matrices is het geweten dat de verhouding van de grootste singuliere waarde tot de tweede grootste singuliere waarden heel groot wordt voor grote matrices. Wanneer men deze verhouding bekijkt van een 100x100 matrix is deze verhouding $\approx 9$, en wanneer men naar 1000x1000 matrices gaat is deze al vaak $\approx 27$. Hier kan een rank-1 matrix dus nog van redelijke nauwkeurigheid zijn terwijl het geheugenverbruik en de rekencomplexiteit enorm verminderd is.
+Waar het geheugen van een volle matrix 8bytes*M*N bedraagt, is dat van een rank-k benadering van deze matrix 8bytes*(M*k+N*k). Hieruit valt gemakkelijk af te leiden dat $k<\frac{mn}{m+n}$ en in het geval van M=N $k<M/2$. Om veel voordeel uit het geheugen te halen moet $k\ll min(M,N)$. Dit kan ten nadele zijn van de nauwkeurigheid van de berekeningen, maar in het geval van grote matrices kan dit nodig zijn om de berekeningen te kunnen uitvoeren. Wanneer men echter werkt met gaussiaans verdeelde ongecorreleerde matrices is het geweten dat de verhouding van de grootste singuliere waarde tot de tweede grootste singuliere waarden heel groot wordt voor grote matrices. Wanneer men deze verhouding bekijkt van een 100x100 matrix is deze verhouding $\approx 9$, en wanneer men naar 1000x1000 matrices gaat is deze al vaak $\approx 27$ en bij 10 000x10 000 $\approx 86$. Hier kan een rank-1 matrix dus nog van redelijke nauwkeurigheid zijn terwijl het geheugenverbruik en de rekencomplexiteit enorm verminderd is.
 
 \section*{besluit}
 
-
+Ondanks de duidelijke winst voor het rekenen met rank-k matrices moet men goed nadenken of het wel nuttig is om deze benadering te maken. In veel gevallen is dit niet nodig en zou het onnodig rekenwerk vragen, maar in sommige gevallen kan dit een heel krachtig middel zijn om snel en met weinig geheugen bewerkingen uit te voeren met matrices. \\
+Verbetering van de code zou er uit kunnen bestaan om de functie lowrank te optimaliseren zodat deze niet in alle gevallen eerst de volledige matrix moet berekenen om een rank-k benadering te maken van een rank-matrix. Ook zou men de implementatie van solveIntFull kunnen aanpassen zodat deze enkel gebruik maakt van oneven waarden van N.
 
 
 \end{document}
