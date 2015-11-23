@@ -247,9 +247,9 @@ contains
 		allocate(X)
 		X%full = .true.
 		X%pointU = .false.
-		allocate(X%Ut(2,1))
+		allocate(X%Ut(1,2))
 		X%Ut(1,1) = 0.7
-		X%Ut(2,1) = -0.9
+		X%Ut(1,2) = -0.9
 
 		call solveIntFull(G,X,N)
 		write(*,'(t10, e15.3,t40,"  <-- This should be around 0.712")') G%Ut(1,1)
@@ -266,7 +266,7 @@ contains
 
 	subroutine test3()
 		integer, parameter :: N=20, Nfull=50, stepprod=50, steplowrank=20, stepfull=5
-		integer :: i, j
+		integer :: i
 		type(Matrix), pointer :: A, B, C, D, E, F
 		double precision :: start, gestopt, timef, timep(2,N), timel(N), timefull(N)
 
