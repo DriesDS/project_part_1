@@ -14,8 +14,8 @@ contains
 
 	subroutine test()
  		call test1()
- 		call test2()
-		call test3()
+  		call test2()
+!		call test3()
 	end subroutine
 
 	subroutine test1()
@@ -265,85 +265,98 @@ contains
 	end subroutine
 
 	subroutine test3()
-		integer, parameter :: N=5
-		integer :: i
+		integer, parameter :: N=20, Nfull=50, stepprod=50, steplowrank=20, stepfull=5
+		integer :: i, j
 		type(Matrix), pointer :: A, B, C, D, E, F
-		double precision :: start, gestopt, time(N,2)
+		double precision :: start, gestopt, timef, timep(2,N), timel(N), timefull(N)
 
 		call random_seed()
-! 		do i = 5,10
-! 			allocate(A)
-! 			A%full = .true.
-! 			A%pointU = .false.
-! 			allocate(A%Ut(2**i,2**i))
-! 			call random_number(A%Ut)
-! 			allocate(B)
-! 			B%full = .true.
-! 			B%pointU = .false.
-! 			allocate(B%Ut(2**i,2**i))
-! 			call random_number(B%Ut)
-			
-! 			call cpu_time(start)
-! 			call matprod(A,B,C)
-! 			call cpu_time(gestopt)
-! 			time(i,1) = gestopt-start
+		allocate(A)
+		A%full = .true.
+		A%pointU = .false.
+		allocate(A%Ut(stepprod*N,stepprod*N))
+		call random_number(A%Ut)
+		allocate(B)
+		B%full = .true.
+		B%pointU = .false.
+		allocate(B%Ut(stepprod*N,stepprod*N))
+		call random_number(B%Ut)
+		
+		call cpu_time(start)
+		call matprod(A,B,C)
+		call cpu_time(gestopt)
+		timef = gestopt-start
 
-! !			deallocate(A%Ut,B%Ut,C%Ut)
-! !			deallocate(C, A, B)
+		!write(*,'(a)') '     rank:          rank*rank:          rank*full:'
+		
+		do i = 1,N
 
-! 			allocate(D)
-! 			D%full = .false.
-! 			D%pointU = .false.
-! 			D%pointV = .false.
-! 			allocate(D%Ut(10,2**i))
-! 			allocate(D%Vt(10,2**i))
-! 			call random_number(D%Ut)
-! 			call random_number(D%Vt)
-! 			allocate(E)
-! 			E%full = .false.
-! 			E%pointU = .false.
-! 			E%pointV = .false.
-! 			allocate(E%Ut(10,2**i))
-! 			allocate(E%Vt(10,2**i))
-! 			call random_number(E%Ut)
-! 			call random_number(E%Vt)
-! 			call cpu_time(start)
-! 			call matprod(D,E,F)
-! 			call cpu_time(gestopt)
-! 			time(i,2) = gestopt-start
-! 			write(*,*) 2**i, time(i,1), time(i,2)
-! 			write(0,*) 2**i, time(i,1), time(i,2)
+			deallocate(A%Ut,B%Ut,C%Ut)
+			deallocate(C, A, B)
 
-! 		enddo
+			allocate(D)
+			D%full = .false.
+			D%pointU = .false.
+			D%pointV = .false.
+			allocate(D%Ut(stepprod*i,stepprod*N))
+			allocate(D%Vt(stepprod*i,stepprod*N))
+			call random_number(D%Ut)
+			call random_number(D%Vt)
+			allocate(E)
+			E%full = .false.
+			E%pointU = .false.
+			E%pointV = .false.
+			allocate(E%Ut(stepprod*i,stepprod*N))
+			allocate(E%Vt(stepprod*i,stepprod*N))
+			call random_number(E%Ut)
+			call random_number(E%Vt)
+			call cpu_time(start)
+			call matprod(D,E,F)
+			call cpu_time(gestopt)
+			timep(i,1) = gestopt-start
 
+			call cpu_time(start)
+			call matprod(A,D,F)
+			call cpu_time(gestopt)
 
-! 		do i = 5,10
+			timep(i,2) = gestopt-start
+			!write(*,'(i10,3(e20.10))') stepprod*i, timep(i,1), timep(i,2), timef
+			!write(0,'(i10,3(e20.10))') stepprod*i, timep(i,1), timep(i,2), timef
 
-! 			allocate(D)
-! 			D%full = .false.
-! 			D%pointU = .false.
-! 			D%pointV = .false.
-! 			allocate(D%Ut(2**i,512))
-! 			allocate(D%Vt(2**i,512))
-! 			call random_number(D%Ut)
-! 			call random_number(D%Vt)
-! 			allocate(E)
-! 			E%full = .false.
-! 			E%pointU = .false.
-! 			E%pointV = .false.
-! 			allocate(E%Ut(2**i,512))
-! 			allocate(E%Vt(2**i,512))
-! 			call random_number(E%Ut)
-! 			call random_number(E%Vt)
-! 			call cpu_time(start)
-! 			call matprod(D,E,F)
-! 			call cpu_time(gestopt)
-! 			time(i,2) = gestopt-start
-! 			write(*,*) 2**i, time(i,2)
-! 			write(0,*) 2**i, time(i,2)
+ 		enddo
 
-! 		enddo
+ 		do i=1,N
 
+			allocate(A)
+			A%full = .true.
+			A%pointU = .false.
+			allocate(A%Ut(steplowrank*N,steplowrank*N))
+			call random_number(A%Ut)
+ 			call cpu_time(start)
+ 			call lowrank(A,B,steplowrank*i)
+ 			call cpu_time(gestopt)
+ 			timel(i) = gestopt-start
+ 			!write(*,*) steplowrank*i, timel(i) 			
+			!write(0,*) steplowrank*i, timel(i) 			
+
+ 		enddo
+
+ 		do i = 1,Nfull
+			allocate(D)
+			D%full = .false.
+			D%pointU = .false.
+			D%pointV = .false.
+			allocate(D%Ut(stepfull*i,stepfull*Nfull))
+			allocate(D%Vt(stepfull*i,stepfull*Nfull))
+			call random_number(D%Ut)
+			call random_number(D%Vt)
+			call cpu_time(start)
+			call full(D,E)
+			call cpu_time(gestopt)
+			timefull(i) = gestopt-start
+ 			!write(*,*) stepfull*i, timefull(i) 			
+			!write(0,*) stepfull*i, timefull(i) 			
+		enddo
 
 	end subroutine
 
@@ -371,7 +384,6 @@ contains
 	subroutine dealloc_test_matrices(M1, M2, M3, M4, xfield)
 		type(Matrix), pointer :: M1, M2, M3, M4, xfield		
 
-		write(*,*) associated(M1), associated(M2), associated(M3), associated(M4), associated(xfield)
 		call M_dealloc(M1)
 		call M_dealloc(M2)
 		call M_dealloc(M3)
