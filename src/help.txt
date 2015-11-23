@@ -32,10 +32,6 @@
 		test:
 			executes all the tests and shows the results
 
-		random M N K:
-			gives a matrix with random values on stdout. If K==min(M,N) it
-			returns a full matrix, otherwise a rank-k m x n matrix.
-
 		full:
 			reads a rank-k matrix from stdin and converts it to a full matrix.
 			This matrix is given on std_out.

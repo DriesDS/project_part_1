@@ -12,7 +12,7 @@ program hmatrices
 	implicit none
 
 	type(Matrix), pointer :: A,B,C
-	integer :: currarg, M, N, K
+	integer :: currarg, N
 	character(len=16) :: cmd
 	logical :: timing
 	double precision :: start, total_time
@@ -73,19 +73,6 @@ program hmatrices
 		call matrixReader(B)
 		call plotField(B,N)
 		call M_dealloc(B)
-	case('random')
-		call getarg(currarg,cmd)
-		currarg = currarg+1
-		read(cmd,*) M
-		call getarg(currarg,cmd)
-		currarg = currarg+1
-		read(cmd,*) N
-		call getarg(currarg,cmd)
-		currarg = currarg+1
-		read(cmd,*) K
-		call random(A,M,N,K)
-		call matrixWriter(A)
-		call M_dealloc(A)
 	case default
 		call help()
 	end select
@@ -130,30 +117,6 @@ contains
 		call M_dealloc(A)
 		call M_dealloc(B)
 	
-	end subroutine
-
-	subroutine random(A,M,N,K)
-		integer, intent(in) :: M,N,K
-		type(Matrix), pointer :: A
-
-		call random_seed()
-
-		allocate(A)
-		if (K == min(M,N)) then
-			A%full = .true.
-			A%pointU = .false.
-			allocate(A%Ut(N,M))
-			call random_number(A%Ut)
-		else
-			A%full = .false.
-			A%pointU = .false.
-			A%pointV = .false.
-			allocate(A%Ut(K,M))
-			allocate(A%Vt(K,N))
-			call random_number(A%Ut)
-			call random_number(A%Vt)
-		endif
-
 	end subroutine
 
 end program

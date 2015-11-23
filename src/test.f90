@@ -15,7 +15,7 @@ contains
 	subroutine test()
  		call test1()
   		call test2()
-!		call test3()
+	!	call test3()
 	end subroutine
 
 	subroutine test1()
@@ -287,12 +287,10 @@ contains
 		call cpu_time(gestopt)
 		timef = gestopt-start
 
-		!write(*,'(a)') '     rank:          rank*rank:          rank*full:'
+		write(*,'(a)') '     rank:          rank*rank:          rank*full:'
 		
+		! testen voor tijdsmeting matprod
 		do i = 1,N
-
-			deallocate(A%Ut,B%Ut,C%Ut)
-			deallocate(C, A, B)
 
 			allocate(D)
 			D%full = .false.
@@ -320,11 +318,11 @@ contains
 			call cpu_time(gestopt)
 
 			timep(i,2) = gestopt-start
-			!write(*,'(i10,3(e20.10))') stepprod*i, timep(i,1), timep(i,2), timef
-			!write(0,'(i10,3(e20.10))') stepprod*i, timep(i,1), timep(i,2), timef
+			write(*,'(i10,3(e20.10))') stepprod*i, timep(i,1), timep(i,2), timef
 
  		enddo
 
+ 		! testen voor tijdsmeting lowrank
  		do i=1,N
 
 			allocate(A)
@@ -336,11 +334,11 @@ contains
  			call lowrank(A,B,steplowrank*i)
  			call cpu_time(gestopt)
  			timel(i) = gestopt-start
- 			!write(*,*) steplowrank*i, timel(i) 			
-			!write(0,*) steplowrank*i, timel(i) 			
+ 			write(*,*) steplowrank*i, timel(i) 			
 
  		enddo
 
+ 		! testen voor tijdmeting full
  		do i = 1,Nfull
 			allocate(D)
 			D%full = .false.
@@ -354,8 +352,7 @@ contains
 			call full(D,E)
 			call cpu_time(gestopt)
 			timefull(i) = gestopt-start
- 			!write(*,*) stepfull*i, timefull(i) 			
-			!write(0,*) stepfull*i, timefull(i) 			
+ 			write(*,*) stepfull*i, timefull(i) 			
 		enddo
 
 	end subroutine

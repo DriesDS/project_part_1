@@ -30,6 +30,7 @@ contains
 		U%Ut = 0
 		do i=1,size(U%Ut,1)
 			do j=1,N
+				! na het herwerken van de gegeven formule:
 				U%Ut(i,1) = U%Ut(i,1)-B(j,1)*1d0/2*log(1d0+X%Ut(i,1)**2+X%Ut(i,2)**2 &
 					-2d0*(X%Ut(i,1)*cos((2d0*j-1)*pi/N)+X%Ut(i,2)*sin((2d0*j-1)*pi/N)))
 			enddo

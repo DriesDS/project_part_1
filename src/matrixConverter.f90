@@ -4,7 +4,6 @@ implicit none
 
 integer, parameter :: defaultin=5, defaultout=6
 character(len=16), parameter :: separationstr='---------'
-integer, parameter :: wp = kind(0.d0)
 
 type Matrix
 	! when the matrix is full, only Ut will be used
@@ -58,7 +57,7 @@ contains
 	subroutine rankMatrixReader(matp, inunit, rows, cols, rank)
 		type(Matrix), pointer :: matp
 		integer, intent(in) :: inunit, rows, cols, rank
-		real(wp) :: elems(rank)
+		double precision :: elems(rank)
 		integer :: row, col
 		
 		allocate(matp)

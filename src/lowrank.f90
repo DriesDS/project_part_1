@@ -55,16 +55,18 @@ contains
 			call dgesvd(jobu, jobvt, m, n, A%Ut, m, Sigma, A%Ut, m, A%Vt, n, work, lwork, info)
 		endif
 
-		r = 0
+		r = 1
 		if (present(epsrel)) then
-			do s = 1,min(m,n)
+			do s = 2,min(m,n)
 				if (Sigma(s)>Sigma(1)*epsrel) r=r+1
 			enddo
 		elseif (present(epsabs)) then
-			do s = 1,min(m,n)
+			do s = 2,min(m,n)
 				if (Sigma(s)>epsabs) r = r+1
 			enddo
 		elseif (present(rank)) then
+			! De uitvoer moet minstens van rank 1 zijn
+			if (rank<=0) rank=1
 			r = rank
 			do s = 1,rank
 				if (Sigma(s)/Sigma(1) < 1d-14) then
@@ -79,6 +81,7 @@ contains
 			! ofwel enkel alle van nul verschillende waarden.
 			rc = min(m,n)/2
 			r = floor(rc)
+			if (r<=0) r = 1
 			do s = 1,floor(rc)
 				if (Sigma(s)/Sigma(1) < 1d-14) then
 					r = s-1
