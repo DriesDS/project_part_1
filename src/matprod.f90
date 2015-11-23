@@ -6,6 +6,8 @@ implicit none
 
 contains
 
+	! deze methode veronderstelt dat de matrix A evenveel kolommen heeft als dat
+	! matrix B rijen heeft.
 	subroutine matprod(A, B, C)
 		type(Matrix), pointer, intent(in) :: A, B
 		type(Matrix), pointer, intent(inout) :: C
