@@ -1,0 +1,121 @@
+module makeGHmatmod
+
+	use matrixconverter
+	use makegfullmod
+
+implicit none
+
+integer, parameter :: k=3, smalls=8
+double precision, parameter :: pi=4d0*atan(1d0)
+
+type HMatrix
+	logical :: subtypeH
+	type(Matrix), pointer :: endmat
+	type(HMatrix), pointer :: leftup
+	type(HMatrix), pointer :: rightup
+	type(HMatrix), pointer :: leftdown
+	type(HMatrix), pointer :: rightdown
+end type
+
+contains
+
+	subroutine makeGHmat(AH, N, gamma)
+		type(HMatrix), pointer :: AH
+		integer, intent(in) :: N
+		double precision, intent(in) :: gamma
+		double precision :: NN
+
+		NN = N
+
+		if (mod(log(NN)/log(2d0),1d0) == 1) then
+			write(0,*) "N has to be a power of 2"
+			return
+		elseif (gamma<=0) then
+			write(0,*) "gamma has to be real positive greater than zero."
+			return
+		endif
+
+		call makeGrec(AH, N, 1, 1, N, gamma)
+
+	end subroutine
+
+	recursive subroutine makeGrec(GH, N, beginx, beginy, s, gamma)
+	! preconditie: N is power of 2
+		type(HMatrix), pointer :: GH
+		integer, intent(in) :: N, beginx, beginy, s
+		double precision, intent(in) :: gamma
+		double precision :: ister, jster, Dist
+
+		! making a full matrix because we reached the end of recursion due to
+		! too small submatrices. Here the matrix is full.
+		if (s <= 2*smalls) then
+			GH%subtypeH = .false.
+			allocate(GH%endmat)
+			GH%endmat%full = .true.
+			GH%endmat%pointU = .false.
+			allocate(GH%endmat%Ut(s, s))
+ 			call calculateGt(GH%endmat%Ut, N, beginx, beginy, s)
+ 			return
+		endif
+
+		ister = beginx + s*1d0/2
+		jster = beginy + s*1d0/2
+		Dist = min(abs(ister-jster),abs(ister-jster-N),abs(ister-jster+N))
+
+		! makeing a rank-k approximation of the matrix when the distance to the
+		! diagonal is wide enough
+		if (Dist>s*gamma) then
+			GH%subtypeH = .false.
+			allocate(GH%endmat)
+			GH%endmat%full = .false.
+			GH%endmat%pointU = .false.
+			GH%endmat%pointV = .false.
+			allocate(GH%endmat%Ut(k,s),GH%endmat%Vt(k,s))
+			call calculateGapprox(GH%endmat, N, beginx, beginy, s)
+ 			return
+		endif
+
+		GH%subtypeH = .true.
+		allocate(GH%leftup)
+		allocate(GH%rightup)
+		allocate(GH%leftdown)
+		allocate(GH%rightdown)
+		call makeGrec(GH%leftup, N, beginx, beginy, s/2, gamma)
+		call makeGrec(GH%rightup, N, beginx+s/2, beginy, s/2, gamma)
+		call makeGrec(GH%leftdown, N, beginx, beginy+s/2, s/2, gamma)
+		call makeGrec(GH%rightdown, N, beginx+s/2, beginy+s/2, s/2, gamma)
+ 
+	end subroutine
+
+	subroutine calculateGapprox(mat, N, beginx, beginy, s)
+		type(Matrix), pointer :: mat
+		integer, intent(in) :: N, beginx, beginy, s
+		integer :: ister, i, j
+		double precision :: arg, d
+
+		ister = beginx + s*1d0/2
+
+		do i = 1,s
+			mat%Ut(1,i) = 1
+			mat%Ut(2,i) = 2*pi*(beginy + i - ister)
+			mat%Ut(3,i) = mat%Ut(2,i)**2 / 2
+		enddo
+
+		do j = 1,s
+			arg = pi*(2*ister-2*j-3)/N
+			d = 2*(1-cos((+1d0+2d0*j-2d0*ister)*pi/N))
+			mat%Vt(1,j) = -log(d)
+			mat%Vt(2,j) = d**(-3)*sin(arg)
+			mat%Vt(3,j) = 3*d**(-5)*sin(arg)**2-d**(-3)*cos(arg)
+		enddo
+
+	end subroutine
+
+	subroutine Hm_dealloc(AH)
+		type(HMatrix), pointer :: AH
+
+		deallocate(AH)
+
+	end subroutine
+
+end module

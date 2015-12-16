@@ -6,6 +6,7 @@ program hmatrices
 	use fullmod
 	use matprodmod
 	use makeGFullmod
+	use makeGHmatmod
 	use solveIntFullmod
 	use plotFieldmod
 
@@ -75,6 +76,7 @@ program hmatrices
 		call plotField(B,N)
 		call M_dealloc(B)
 	case('makeGHmat')
+		allocate(AH)
 		call getarg(currarg,cmd)
 		currarg = currarg+1
 		read(cmd,*) N
@@ -82,7 +84,7 @@ program hmatrices
 		currarg = currarg+1
 		read(cmd,*) y
 		call makeGHmat(AH, N, y)
-		Hm_dealloc(AH)
+		call Hm_dealloc(AH)
 	case('vecProdHmat')
 		call getarg(currarg,cmd)
 		currarg = currarg+1

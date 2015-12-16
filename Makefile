@@ -2,8 +2,8 @@ FC = ifort
 
 src = ./src
 
-objects = help.o test.o full.o lowrank.o matprod.o makeGFull.o solveIntFull.o plotField.o hmatrices.o matrixConverter.o
-modules = helpmod.mod testmod.mod fullmod.mod lowrankmod.mod matprodmod.mod makegfullmod.mod solveintfullmod.mod plotfieldmod.mod matrixconverter.mod
+objects = help.o test.o full.o lowrank.o matprod.o makeGFull.o makeGHmat.o solveIntFull.o plotField.o hmatrices.o matrixConverter.o
+modules = helpmod.mod testmod.mod fullmod.mod lowrankmod.mod matprodmod.mod makegfullmod.mod makeghmatmod.mod solveintfullmod.mod plotfieldmod.mod matrixconverter.mod
 
 # Eventuele compilatievlaggen per compiler
 FFLAGS_g95      = -O3
@@ -52,6 +52,11 @@ makeGFull.o: $(src)/makeGFull.f90 matrixconverter.mod
 	$(FC) -c $(FFLAGS) $(src)/makeGFull.f90
 makegfullmod.mod: $(src)/makeGFull.f90 makeGFull.o
 	$(FC) -c $(FFLAGS) $(src)/makeGFull.f90
+
+makeGHmat.o: $(src)/makeGHmat.f90 matrixconverter.mod
+	$(FC) -c $(FFLAGS) $(src)/makeGHmat.f90
+makeghmatmod.mod: $(src)/makeGHmat.f90 makeGHmat.o
+	$(FC) -c $(FFLAGS) $(src)/makeGHmat.f90
 
 solveIntFull.o: $(src)/solveIntFull.f90 matrixconverter.mod makegfullmod.mod
 	$(FC) -c $(FFLAGS) $(src)/solveIntFull.f90
