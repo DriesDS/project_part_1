@@ -15,7 +15,7 @@ contains
 		double precision, parameter :: pi=4d0*atan(1d0)
 		integer :: i, j, info
 		
-		call calculateGt(A,N)
+		call calculateGt(A,N,1,1,N)
 		A = Transpose(A)
 		forall (i=1:N) B(i,1) = cos(2d0*i*pi/N)
 		IPIV = 0

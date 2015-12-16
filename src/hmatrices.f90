@@ -12,10 +12,11 @@ program hmatrices
 	implicit none
 
 	type(Matrix), pointer :: A,B,C
+	type(HMatrix), pointer :: AH
 	integer :: currarg, N
 	character(len=16) :: cmd
 	logical :: timing
-	double precision :: start, total_time
+	double precision :: start, total_time, y
 
 	currarg = 1
 	timing = .false.
@@ -73,6 +74,24 @@ program hmatrices
 		call matrixReader(B)
 		call plotField(B,N)
 		call M_dealloc(B)
+	case('makeGHmat')
+		call getarg(currarg,cmd)
+		currarg = currarg+1
+		read(cmd,*) N
+		call getarg(currarg,cmd)
+		currarg = currarg+1
+		read(cmd,*) y
+		call makeGHmat(AH, N, y)
+		Hm_dealloc(AH)
+	case('vecProdHmat')
+		call getarg(currarg,cmd)
+		currarg = currarg+1
+		read(cmd,*) N
+		call getarg(currarg,cmd)
+		currarg = currarg+1
+		read(cmd,*) y
+		call matrixReader(A)
+		call vecProdHmat(A, N, y)
 	case default
 		call help()
 	end select
