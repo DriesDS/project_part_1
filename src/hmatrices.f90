@@ -9,6 +9,7 @@ program hmatrices
 	use makeGHmatmod
 	use solveIntFullmod
 	use plotFieldmod
+	use vecProdHmatmod
 
 	implicit none
 
@@ -86,6 +87,7 @@ program hmatrices
 		call makeGHmat(AH, N, y)
 		call Hm_dealloc(AH)
 	case('vecProdHmat')
+		allocate(AH)
 		call getarg(currarg,cmd)
 		currarg = currarg+1
 		read(cmd,*) N
@@ -93,7 +95,7 @@ program hmatrices
 		currarg = currarg+1
 		read(cmd,*) y
 		call matrixReader(A)
-		call vecProdHmat(A, N, y)
+		call vecProdHmat(AH, N, y, A)
 	case default
 		call help()
 	end select

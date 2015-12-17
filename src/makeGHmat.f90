@@ -22,8 +22,9 @@ contains
 	subroutine makeGHmat(AH, N, gamma)
 		type(HMatrix), pointer :: AH
 		integer, intent(in) :: N
+		integer :: elems
 		double precision, intent(in) :: gamma
-		double precision :: NN
+		double precision :: NN, delems
 
 		NN = N
 
@@ -36,6 +37,11 @@ contains
 		endif
 
 		call makeGrec(AH, N, 1, 1, N, gamma)
+
+		call elemsinHmat(AH, elems)
+		delems = elems
+		write(0,'(a,i0)') 'number of elements in the matrix: ', elems
+		write(0,'(a,e10.3,a)') 'This is a percentage of ', delems/N/N*100, ' of the elements of the matrix.'
 
 	end subroutine
 
@@ -111,8 +117,42 @@ contains
 
 	end subroutine
 
-	subroutine Hm_dealloc(AH)
+	recursive subroutine elemsinHmat(AH, elems)
+		type(HMatrix), pointer, intent(in) :: AH
+		integer :: elems, elemssub
+
+		! trivial case
+		if (.not. AH%subtypeH) then
+			elems = size(AH%endmat%Ut,1) * size(AH%endmat%Ut,2)
+			if (.not. AH%endmat%full) then
+				elems = elems + size(AH%endmat%Vt,1) * size(AH%endmat%Vt,2)
+			endif
+			return
+		endif
+
+		! recursion
+		call elemsinHmat(AH%leftup, elemssub)
+		elems = elemssub
+		call elemsinHmat(AH%leftdown, elemssub)
+		elems = elems+elemssub
+		call elemsinHmat(AH%rightup, elemssub)
+		elems = elems+elemssub
+		call elemsinHmat(AH%rightdown, elemssub)
+		elems = elems+elemssub
+
+	end subroutine
+
+	recursive subroutine Hm_dealloc(AH)
 		type(HMatrix), pointer :: AH
+
+		if (.not. AH%subtypeH) then
+			call M_dealloc(AH%endmat)
+		else
+			call Hm_dealloc(AH%leftup)
+			call Hm_dealloc(AH%rightup)
+			call Hm_dealloc(AH%leftdown)
+			call Hm_dealloc(AH%rightdown)
+		endif
 
 		deallocate(AH)
 

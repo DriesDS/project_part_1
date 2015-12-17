@@ -7,6 +7,8 @@ use matprodmod
 use makeGFullmod
 use solveIntFullmod
 use plotfieldmod
+use vecProdHmatmod
+use makeGHmatmod
 
 implicit none
 
@@ -14,8 +16,9 @@ contains
 
 	subroutine test()
  		call test1()
-  		call test2()
+  	!	call test2()
 	!	call test3()
+		call test4()
 	end subroutine
 
 	subroutine test1()
@@ -116,6 +119,7 @@ contains
 
 		! test 10
 		!call dealloc_test_matrices(M1, M2, M3, M4, xfield)
+		call loadmatrices(M1, M2, M3, M4, xfield)
 		call matprod(M1, M2, M1u)
 		call full(M1u, M2u)
 		call unit_digit(d(10), M2u, 2, 10)
@@ -354,6 +358,27 @@ contains
 			timefull(i) = gestopt-start
  			write(*,*) stepfull*i, timefull(i) 			
 		enddo
+
+	end subroutine
+
+	subroutine test4()
+		type(HMatrix), pointer :: AH
+		integer :: elems, i
+		integer, parameter :: begin=5, eind=9
+		double precision, parameter :: gamma=5d0
+		double precision :: procent
+
+		do i = begin, eind
+			write(0,*) 'iteratie: ', i
+			call makeGHmat(AH, 2**i, gamma)
+			write(0,*) 'AH made'
+			call elemsinHmat(AH, elems)
+			write(0,*) 'elems = ', elems
+			procent = elems/4**i
+			write(0,'(i10, e12.4)') elems, procent
+			call HM_dealloc(AH)
+		enddo
+
 
 	end subroutine
 

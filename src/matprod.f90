@@ -63,6 +63,7 @@ contains
 
 		type(Matrix), pointer, intent(in) :: A, B
 		type(Matrix), pointer, intent(inout) :: C
+		double precision, dimension(:,:), allocatable :: dummy
 		double precision :: alpha, beta
 		integer :: m,n,k
 		
@@ -73,13 +74,25 @@ contains
 		beta = 0.0
 
 		allocate(C)
-		C%full = .false.
-		C%pointU = .true.
-		C%pointV = .false.
-		allocate(C%Vt(m,n))
-		C%Ut => A%Ut
-				
-		call dgemm('N','T', m, n, k, alpha, A%Vt, m, B%Ut, n, beta, C%Vt, m)
+
+		if (n .gt. m) then
+			C%full = .false.
+			C%pointU = .true.
+			C%pointV = .false.
+			allocate(C%Vt(m,n))
+			C%Ut => A%Ut
+					
+			call dgemm('N','T', m, n, k, alpha, A%Vt, m, B%Ut, n, beta, C%Vt, m)
+		else
+			C%full = .true.
+			C%pointU = .false.
+			allocate(C%Ut(n,size(A%Ut,2)))
+			allocate(dummy(m,n))
+
+			call dgemm('N','T', m, n, k, alpha, A%Vt, m, B%Ut, n, beta, dummy, m)
+			call dgemm('T','N', n, size(A%Ut,2), m, alpha, dummy, m, A%Ut, size(A%Ut, 1), beta, C%Ut, n)
+			deallocate(dummy)
+		endif
 
 	end subroutine
 	

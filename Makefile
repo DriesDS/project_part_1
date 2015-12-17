@@ -2,8 +2,8 @@ FC = ifort
 
 src = ./src
 
-objects = help.o test.o full.o lowrank.o matprod.o makeGFull.o makeGHmat.o solveIntFull.o plotField.o hmatrices.o matrixConverter.o
-modules = helpmod.mod testmod.mod fullmod.mod lowrankmod.mod matprodmod.mod makegfullmod.mod makeghmatmod.mod solveintfullmod.mod plotfieldmod.mod matrixconverter.mod
+objects = help.o test.o full.o lowrank.o matprod.o makeGFull.o makeGHmat.o solveIntFull.o plotField.o vecProdHmat.o hmatrices.o matrixConverter.o
+modules = helpmod.mod testmod.mod fullmod.mod lowrankmod.mod matprodmod.mod makegfullmod.mod makeghmatmod.mod solveintfullmod.mod plotfieldmod.mod vecprodhmatmod.mod matrixconverter.mod
 
 # Eventuele compilatievlaggen per compiler
 FFLAGS_g95      = -O3
@@ -28,7 +28,7 @@ help.o: $(src)/help.f90
 helpmod.mod: $(src)/help.f90 help.o
 	$(FC) -c $(FFLAGS) $(src)/help.f90
 
-test.o: $(src)/test.f90 matrixconverter.mod fullmod.mod solveintfullmod.mod makegfullmod.mod lowrankmod.mod matprodmod.mod plotfieldmod.mod
+test.o: $(src)/test.f90 matrixconverter.mod fullmod.mod solveintfullmod.mod makegfullmod.mod lowrankmod.mod matprodmod.mod plotfieldmod.mod vecprodhmatmod.mod makeghmatmod.mod
 	$(FC) -c $(FFLAGS) $(src)/test.f90
 testmod.mod: $(src)/test.f90 test.o matrixconverter.mod
 	$(FC) -c $(FFLAGS) $(src)/test.f90
@@ -72,6 +72,11 @@ matrixConverter.o: $(src)/matrixConverter.f90
 	$(FC) -c $(FFLAGS) $(src)/matrixConverter.f90
 matrixconverter.mod: $(src)/matrixConverter.f90 matrixConverter.o
 	$(FC) -c $(FFLAGS) $(src)/matrixConverter.f90
+
+vecProdHmat.o: $(src)/vecProdHmat.f90 matrixconverter.mod makeghmatmod.mod
+	$(FC) -c $(FFLAGS) $(src)/vecProdHmat.f90
+vecprodhmatmod.mod: $(src)/vecProdHmat.f90 vecProdHmat.o
+	$(FC) -c $(FFLAGS) $(src)/vecProdHmat.f90
 
 clean:
 	rm $(objects) $(modules)

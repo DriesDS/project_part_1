@@ -10,9 +10,9 @@ contains
 		character(len=128) :: textline
 		integer :: i, io
 
-		open(7, file = 'help.txt')
+		open(10, file = './src/help.txt')
 		do i = 1, maxlines
-			read(7,'(a)',iostat=io) textline
+			read(10,'(a)',iostat=io) textline
 			if (io<0) exit
 			write(0,'(a)') textline
 		enddo
