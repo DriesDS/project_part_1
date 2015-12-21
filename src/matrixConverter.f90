@@ -18,7 +18,9 @@ contains
 		type(Matrix), pointer :: matp
 		integer, optional, intent(in) :: optinunit
 		integer :: inunit, rows, cols, rank
-		character(len=8) :: matkind, mat, r, x, c
+		character(len=4) :: matkind, r, c
+		character(len=6) :: mat
+		character(len=1) :: x
 		
 		inunit = defaultin
 		if (present(optinunit)) inunit = optinunit

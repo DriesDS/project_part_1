@@ -51,6 +51,16 @@
 			Calculates the matrix necessary for the calculation of the integral
 			equation. It gives the matrix in the matrix convention on stdout.
 
+		makeGHmat N y:
+			Calculates the H-matrix. N is the number of terms used, it should be
+			a power of 2. The other argument y shoulc be positive. It prints the
+			number of floats in the H-matrix.
+
+		vecProdHmat N y:
+			Calculates the H-matrix as in 'makeGHmat' with the same arguments N
+			and y. Then it reads a matrix x, Nx1 full matrix, and prints the
+			product of the H-matrix and x on stdout.
+
 		solveIntFull N:
 			Reads a 2xL matrix x from stdin. The method then calculates the same
 			matrix as in makeGFull and prints u (the solution of the integral 

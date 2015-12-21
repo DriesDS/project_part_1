@@ -14,7 +14,7 @@ contains
 		do i = 1, maxlines
 			read(10,'(a)',iostat=io) textline
 			if (io<0) exit
-			write(0,'(a)') textline
+			write(0,'(a)', advance='NO') textline
 		enddo
 
 	end subroutine
