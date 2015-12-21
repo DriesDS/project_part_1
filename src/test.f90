@@ -363,21 +363,38 @@ contains
 
 	subroutine test4()
 		type(HMatrix), pointer :: AH
-		integer :: elems, i
-		integer, parameter :: begin=5, eind=9
+		integer, parameter :: begin=5, eind=14, beginy=1, eindy=10, gammatestN=2**10
+		integer :: elems, i, elemslist(eind-begin+1), elemslisty(eindy-beginy+1)
 		double precision, parameter :: gamma=5d0
-		double precision :: procent
+		double precision :: y, procent(eind-begin+1), procenty(eindy-beginy+1)
 
 		do i = begin, eind
-			write(0,*) 'iteratie: ', i
+			allocate(AH)
 			call makeGHmat(AH, 2**i, gamma)
-			write(0,*) 'AH made'
 			call elemsinHmat(AH, elems)
-			write(0,*) 'elems = ', elems
-			procent = elems/4**i
-			write(0,'(i10, e12.4)') elems, procent
+			elemslist(1+i-begin) = elems
+			procent(1+i-begin) = elems*1d0/4**i
 			call HM_dealloc(AH)
 		enddo
+
+		do i = beginy, eindy
+			y = i
+			allocate(AH)
+			call makeGHmat(AH, gammatestN, y)
+			call elemsinHmat(AH, elems)
+			elemslisty(1+i-beginy) = elems
+			procenty(1+i-beginy) = elems*1d0/(gammatestN**2)
+			call HM_dealloc(AH)
+		enddo
+
+		do i = 1,eind-begin+1
+			write(*,'(i10, e12.4)') elemslist(i), procent(i)
+		enddo
+		do i = 1,eindy-beginy+1
+			write(*,'(i10, e12.4)') elemslisty(i), procenty(i)
+		enddo
+
+
 
 
 	end subroutine

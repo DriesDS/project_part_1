@@ -19,12 +19,15 @@ contains
 			return
 		endif
 
-		call MatrixReader(vec)
 		if (vec%full == .false. .or. size(vec%Ut,2) .ne. N) then
 			write(0,*) 'Invalid size of matrix.'
 			return
 		endif
 		call makeGHmat(AH, N, gamma)
+
+		call recvecProdHmat(AH, N, vec, prodmat)
+
+		call matrixWriter(prodmat)
 
 	end subroutine
 
@@ -54,7 +57,7 @@ contains
 		vec2%Ut(1,1:s/2) = vec%Ut(1,s/2+1:s)
 
 		call recvecProdHmat(AH%leftup, s/2, vec1, prodmatsub)
-		prodmat%Ut(1,1:s/2) = prodmat%Ut(1,1:s/2)+prodmatsub%Ut(1,1:s/2)
+		prodmat%Ut(1,1:s/2) = prodmatsub%Ut(1,1:s/2)
 		call M_dealloc(prodmatsub)
 
 		call recvecProdHmat(AH%rightup, s/2, vec2, prodmatsub)
@@ -62,7 +65,7 @@ contains
 		call M_dealloc(prodmatsub)
 
 		call recvecProdHmat(AH%leftdown, s/2, vec1, prodmatsub)
-		prodmat%Ut(1,s/2+1:s) = prodmat%Ut(1,1:s/2)+prodmatsub%Ut(1,1:s/2)
+		prodmat%Ut(1,s/2+1:s) = prodmatsub%Ut(1,1:s/2)
 		call M_dealloc(prodmatsub)
 
 		call recvecProdHmat(AH%rightdown, s/2, vec2, prodmatsub)
