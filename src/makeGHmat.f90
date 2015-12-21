@@ -104,7 +104,7 @@ contains
 		ister = beginx + s*1d0/2
 
 		do i = 1,s
-			mat%Ut(1,i) = 1d0/N
+			mat%Ut(1,i) = 1d0
 			mat%Ut(2,i) = 2*pi*(beginy + i - ister)/N
 			mat%Ut(3,i) = mat%Ut(2,i)**2 / 2
 		enddo
