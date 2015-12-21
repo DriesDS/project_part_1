@@ -67,6 +67,8 @@ contains
 			GH%endmat%pointV = .false.
 			allocate(GH%endmat%Ut(k,s),GH%endmat%Vt(k,s))
 			call calculateGapprox(GH%endmat, N, beginx, beginy, s)
+			write(*,*) 'making approximation, beginx = ', beginx, 'beginy = ', beginy, 's = ', s
+ 			call matrixWriter(GH%endmat)
  			return
 		endif
 
