@@ -23,7 +23,7 @@ contains
 			write(0,*) 'Invalid size of matrix.'
 			return
 		endif
-		
+
 		call makeGHmat(AH, N, gamma)
 
 		call recvecProdHmat(AH, N, vec, prodmat)
@@ -54,6 +54,7 @@ contains
 		vec2%pointU = .false.
 		prodmat%pointU = .false.
 		allocate(vec1%Ut(1,s/2), vec2%Ut(1,s/2), prodmat%Ut(1,s))
+		write(*,*) size(vec1%Ut,1), size(vec1%Ut,2), size(vec%Ut,1), size(vec%Ut,2)
 		vec1%Ut(1,1:s/2) = vec%Ut(1,1:s/2)
 		vec2%Ut(1,1:s/2) = vec%Ut(1,s/2+1:s)
 
@@ -63,6 +64,7 @@ contains
 
 		call recvecProdHmat(AH%rightup, s/2, vec2, prodmatsub)
 		prodmat%Ut(1,1:s/2) = prodmat%Ut(1,1:s/2)+prodmatsub%Ut(1,1:s/2)
+		write(*,*) size(prodmat%Ut,1), size(prodmat%Ut,2), size(prodmatsub%Ut,1), size(prodmatsub%Ut,2)
 		call M_dealloc(prodmatsub)
 
 		call recvecProdHmat(AH%leftdown, s/2, vec1, prodmatsub)
@@ -70,7 +72,7 @@ contains
 		call M_dealloc(prodmatsub)
 
 		call recvecProdHmat(AH%rightdown, s/2, vec2, prodmatsub)
-		prodmat%Ut(1,s/2+1:s) = prodmat%Ut(1,1:s/2)+prodmatsub%Ut(1,1:s/2)
+		prodmat%Ut(1,s/2+1:s) = prodmat%Ut(1,s/2+1:s)+prodmatsub%Ut(1,1:s/2)
 		call M_dealloc(prodmatsub)
 
 		call M_dealloc(vec1)
