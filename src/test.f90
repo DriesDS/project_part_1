@@ -15,8 +15,8 @@ implicit none
 contains
 
 	subroutine test()
- 		call test1()
-  	!	call test2()
+		call test1()
+	!	call test2()
 	!	call test3()
 		call test4()
 	end subroutine
@@ -394,13 +394,10 @@ contains
 			write(*,'(i10, e12.4)') elemslisty(i), procenty(i)
 		enddo
 
-
-
-
 	end subroutine
 
 	subroutine loadmatrices(M1, M2, M3, M4, xfield)
-		type(Matrix), pointer :: M1, M2, M3, M4, xfield		
+		type(Matrix), pointer :: M1, M2, M3, M4, xfield
 
 		open(10,file='./tests/M1.in')
 		call matrixReader(M1, 10)
