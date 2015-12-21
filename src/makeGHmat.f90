@@ -36,6 +36,7 @@ contains
 			return
 		endif
 
+		AH%subtypeH = .true.
 		call makeGrec(AH, N, 1, 1, N, gamma)
 
 		call elemsinHmat(AH, elems)
@@ -51,18 +52,6 @@ contains
 		integer, intent(in) :: N, beginx, beginy, s
 		double precision, intent(in) :: gamma
 		double precision :: ister, jster, Dist
-
-		! making a full matrix because we reached the end of recursion due to
-		! too small submatrices. Here the matrix is full.
-		if (s <= 2*smalls) then
-			GH%subtypeH = .false.
-			allocate(GH%endmat)
-			GH%endmat%full = .true.
-			GH%endmat%pointU = .false.
-			allocate(GH%endmat%Ut(s, s))
- 			call calculateGt(GH%endmat%Ut, N, beginx, beginy, s)
- 			return
-		endif
 
 		ister = beginx + s*1d0/2
 		jster = beginy + s*1d0/2
@@ -81,6 +70,19 @@ contains
  			return
 		endif
 
+		! making a full matrix because we reached the end of recursion due to
+		! too small submatrices. Here the matrix is full.
+		if (s <= smalls) then
+			GH%subtypeH = .false.
+			allocate(GH%endmat)
+			GH%endmat%full = .true.
+			GH%endmat%pointU = .false.
+			allocate(GH%endmat%Ut(s, s))
+ 			call calculateGt(GH%endmat%Ut, N, beginx, beginy, s)
+ 			return
+		endif
+
+		! recursie
 		GH%subtypeH = .true.
 		allocate(GH%leftup)
 		allocate(GH%rightup)

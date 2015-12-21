@@ -23,6 +23,7 @@ contains
 			write(0,*) 'Invalid size of matrix.'
 			return
 		endif
+		
 		call makeGHmat(AH, N, gamma)
 
 		call recvecProdHmat(AH, N, vec, prodmat)
