@@ -101,11 +101,11 @@ contains
 		integer :: ister, i, j
 		double precision :: arg, d
 
-		ister = beginx + s*1d0/2
+		ister = beginy + s*1d0/2 - 0.5d0
 
 		do i = 1,s
 			mat%Ut(1,i) = 1d0
-			mat%Ut(2,i) = 2*pi*(beginy + i - ister)/N
+			mat%Ut(2,i) = 2*pi*(beginy -1 + i - ister)/N
 			mat%Ut(3,i) = mat%Ut(2,i)**2 / 2
 		enddo
 
