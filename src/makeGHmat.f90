@@ -110,11 +110,11 @@ contains
 		enddo
 
 		do j = 1,s
-			arg = pi*(2*ister-2*j-3)/N
+			arg = pi*(2d0*ister-2d0*j-3d0)/N
 			d = 2*(1-cos((+1d0+2d0*j-2d0*ister)*pi/N))
-			mat%Vt(1,j) = -log(d)
+			mat%Vt(1,j) = -0.5d0*log(d)
 			mat%Vt(2,j) = d**(-3)*sin(arg)
-			mat%Vt(3,j) = 3*d**(-5)*sin(arg)**2-d**(-3)*cos(arg)
+			mat%Vt(3,j) = 3d0*d**(-5)*sin(arg)**2-d**(-3)*cos(arg)
 		enddo
 
 	end subroutine
