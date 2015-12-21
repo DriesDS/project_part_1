@@ -28,7 +28,7 @@ contains
 
 		NN = N
 
-		if (mod(log(NN)/log(2d0),1d0) == 1) then
+		if (min(mod(log(NN)/log(2d0),1d0), abs(mod(log(NN)/log(2d0),1d0))) > 1d-5) then
 			write(0,*) "N has to be a power of 2"
 			return
 		elseif (gamma<=0) then
