@@ -37,9 +37,9 @@ contains
 		! maar dan 1 plaats naar onder geshift. We berekenen dus enkel de eerste
 		! kolom en kopieren die dan telkens in de volgende kolommen.
 		! inverted indices since we are calculating Gt
-		i = beginx
+		i = beginy
 		do j=0,s-1
-			mat(j+1,1) = -0.5d0*log( 2*(1-cos((-1d0+2d0*(j+beginy)-2d0*i)*pi/N)) )
+			mat(j+1,1) = -0.5d0*log( 2*(1-cos((-1d0+2d0*(j+beginx)-2d0*i)*pi/N)) )
 		enddo
 
 		do i = 2,s
