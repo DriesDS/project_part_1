@@ -18,7 +18,7 @@ contains
 		call test1()
 	!	call test2()
 	!	call test3()
-		call test4()
+	!	call test4()
 	end subroutine
 
 	subroutine test1()
