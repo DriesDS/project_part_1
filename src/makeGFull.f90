@@ -42,10 +42,17 @@ contains
 			mat(j+1,1) = -0.5d0*log( 2*(1-cos((1d0+2d0*(j+beginx)-2d0*i)*pi/N)) )
 		enddo
 
-		do i = 2,s
-			mat(1,i) = mat(s,i-1)
-			mat(2:s,i) = mat(1:s-1,i-1)
-		enddo
+		if (s == N) then
+			do i = 2,s
+				mat(1,i) = mat(s,i-1)
+				mat(2:s,i) = mat(1:s-1,i-1)
+			enddo
+		else
+			do i = 2,s
+				mat(1,i) = -0.5d0*log( 2*(1-cos((1d0+2d0*beginx-2d0*(i+beginy-1))*pi/N)) )
+				mat(2:s,i) = mat(1:s-1,i-1)
+			enddo
+		endif
 	end subroutine
 
 end module
