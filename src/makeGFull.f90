@@ -39,7 +39,7 @@ contains
 		! inverted indices since we are calculating Gt
 		i = beginy
 		do j=0,s-1
-			mat(j+1,1) = -0.5d0*log( 2*(1-cos((-1d0+2d0*(j+beginx)-2d0*i)*pi/N)) )
+			mat(j+1,1) = -0.5d0*log( 2*(1-cos((1d0+2d0*(j+beginx)-2d0*i)*pi/N)) )
 		enddo
 
 		do i = 2,s
