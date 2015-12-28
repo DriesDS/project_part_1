@@ -433,7 +433,7 @@ contains
 
 		write(command,'(a,i0,x,e12.4,a)') './hmatrices makeGFull ', N, y, ' >flops.out'
 		call SYSTEM(command)
-		open(10,file='flops.out')
+		open(10,file='./flops.out')
 		read(10,*) nbfloatsstr
 		close(10)
 		read(nbfloats,*) nbfloats
