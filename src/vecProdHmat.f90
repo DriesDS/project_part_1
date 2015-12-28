@@ -29,6 +29,8 @@ contains
 
 		call recvecProdHmat(AH, N, vec, prodmat, flops)
 
+		write(0,'(a,i0)') "het aantal gebruikte flops = ", flops
+
 	end subroutine
 
 	recursive subroutine recvecProdHmat(AH, s, vec, prodmat, flops)
