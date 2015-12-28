@@ -101,7 +101,7 @@ program hmatrices
 		call matrixWriter(B)
 		call M_dealloc(A)
 		call M_dealloc(B)
-		write(,*) elems
+		write(0,*) elems
 	case default
 		call help()
 	end select
