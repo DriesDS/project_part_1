@@ -63,7 +63,6 @@ contains
 		! makeing a rank-k approximation of the matrix when the distance to the
 		! diagonal is wide enough
 		if (Dist>s*gamma) then
-			write(*,*) ":::::: ", beginx, beginy, s
 			GH%subtypeH = .false.
 ! 			!!! uncomment for approximation by formula
 ! 			allocate(GH%endmat)
@@ -74,26 +73,30 @@ contains
 ! 			call calculateGapprox(GH%endmat, N, beginx, beginy, s)
 ! 			!!! \uncomment for approximation by formula
 
-! 			!!! uncomment for approximation by svd
-! 			allocate(fullapprox)
-! 			fullapprox%full = .true.
-! 			fullapprox%pointU = .false.
-! 			allocate(fullapprox%Ut(s,s))
-! 			call calculateGt(fullapprox%Ut, N, beginx, beginy, s)
-! 			call lowrank(fullapprox, GH%endmat, rank=k)
-! 			call M_dealloc(fullapprox)
-! 			!!! \uncomment for approximation by svd
+			!!! uncomment for approximation by svd
+			allocate(fullapprox)
+			fullapprox%full = .true.
+			fullapprox%pointU = .false.
+			allocate(fullapprox%Ut(s,s))
+			call calculateGt(fullapprox%Ut, N, beginx, beginy, s)
+			call lowrank(fullapprox, GH%endmat, rank=k)
+			if (s==16 .and. beginx == 257 .and. beginy == 433) then
+				call matrixWriter(fullapprox)
+				call matrixWriter(GH%endmat)
+			endif
+			call M_dealloc(fullapprox)
+			!!! \uncomment for approximation by svd
 
-			!!! uncomment for full matrix use
-			allocate(GH%endmat)
-			GH%endmat%full = .false.
-			GH%endmat%pointU = .false.
-			GH%endmat%pointV = .false.
-			allocate(GH%endmat%Ut(s, s), GH%endmat%Vt(s,s))
- 			call calculateGt(GH%endmat%Ut, N, beginx, beginy, s)
- 			GH%endmat%Vt = 0
- 			forall(j=1:s) GH%endmat%Vt(j,j) = 1
-			!!! \uncomment for full matrix use
+! 			!!! uncomment for full matrix use
+! 			allocate(GH%endmat)
+! 			GH%endmat%full = .false.
+! 			GH%endmat%pointU = .false.
+! 			GH%endmat%pointV = .false.
+! 			allocate(GH%endmat%Ut(s, s), GH%endmat%Vt(s,s))
+!  			call calculateGt(GH%endmat%Ut, N, beginx, beginy, s)
+!  			GH%endmat%Vt = 0
+!  			forall(j=1:s) GH%endmat%Vt(j,j) = 1
+! 			!!! \uncomment for full matrix use
 
 			return
 		endif

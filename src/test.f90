@@ -368,6 +368,8 @@ contains
 		double precision, parameter :: gamma=5d0
 		double precision :: y, procent(eind-begin+1), procenty(eindy-beginy+1)
 
+		!call SYSTEM('')
+
 		do i = begin, eind
 			allocate(AH)
 			call makeGHmat(AH, 2**i, gamma)
