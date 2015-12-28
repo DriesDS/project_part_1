@@ -130,11 +130,9 @@ contains
 
 		ister = beginy + s*1d0/2 - 0.5d0
 
-		do i = 0,s-1
-			mat%Ut(1,i+1) = 1d0
-			mat%Ut(2,i+1) = 2*pi*(beginy+i - ister)/N
-			mat%Ut(3,i+1) = mat%Ut(2,i+1)**2 / 2
-		enddo
+		mat%Ut(1,1:s) = 1d0
+		mat%Ut(2,1:s) = (/ (2*pi*(beginy+i - ister)/N, i=0,s-1) /)
+		mat%Ut(2,1:s) = mat%Ut(2,1:s)**2/2
 
 		do j = -1,s-2 ! cause indeces of j go from 0 to N-1
 			arg = pi*(2d0*ister-2d0*(j+beginx)-3d0)/N
