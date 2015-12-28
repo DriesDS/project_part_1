@@ -432,7 +432,6 @@ contains
 		character(len=16) :: nbfloatsstr
 
 		write(command,'(a,i0,x,e12.4,a)') './hmatrices makeGHmat ', N, y, ' >flops.out'
-		write(*,*) command
 		call SYSTEM(command)
 		open(10,file='./flops.out')
 		read(10,*) nbfloatsstr
