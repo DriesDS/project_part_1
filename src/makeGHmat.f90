@@ -89,7 +89,7 @@ contains
 			allocate(GH%endmat%Ut(s, s), GH%endmat%Vt(s,s))
  			call calculateGt(GH%endmat%Ut, N, beginx, beginy, s)
  			GH%endmat%Vt = 0
- 			forall(j=1,s) GH%endmat%Vt(j,j) = 1
+ 			forall(j=1:s) GH%endmat%Vt(j,j) = 1
 
 			return
 		endif
