@@ -52,6 +52,7 @@ contains
 		type(HMatrix), pointer :: GH
 		type(Matrix), pointer :: fullapprox
 		integer, intent(in) :: N, beginx, beginy, s
+		integer :: j
 		double precision, intent(in) :: gamma
 		double precision :: ister, jster, Dist
 
@@ -83,10 +84,12 @@ contains
 ! 			!!! \uncomment for approximation by svd
 
 			allocate(GH%endmat)
-			GH%endmat%full = .true.
+			GH%endmat%full = .false.
 			GH%endmat%pointU = .false.
-			allocate(GH%endmat%Ut(s, s))
+			allocate(GH%endmat%Ut(s, s), GH%endmat%Vt(s,s))
  			call calculateGt(GH%endmat%Ut, N, beginx, beginy, s)
+ 			GH%endmat%Vt = 0
+ 			forall(j=1,s) GH%endmat%Vt(j,j) = 1
 
 			return
 		endif
