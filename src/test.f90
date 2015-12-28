@@ -18,7 +18,7 @@ contains
 		call test1()
 	!	call test2()
 	!	call test3()
-	!	call test4()
+		call test4()
 	end subroutine
 
 	subroutine test1()
@@ -363,38 +363,53 @@ contains
 
 	subroutine test4()
 		type(HMatrix), pointer :: AH
+		type(Matrix), pointer :: x1,x2
 		integer, parameter :: begin=5, eind=14, beginy=1, eindy=10, gammatestN=2**10
 		integer :: elems, i, elemslist(eind-begin+1), elemslisty(eindy-beginy+1)
 		double precision, parameter :: gamma=5d0
 		double precision :: y, procent(eind-begin+1), procenty(eindy-beginy+1)
+		double precision :: xnorm, fnorm, diff(512)
 
-		!call SYSTEM('')
+		call SYSTEM('./hmatrices makeGFull 512 >G.out')
+		call SYSTEM('cat test/randn512.in | ./hmatrices vecProdHmat 512 5 >x1.out')
+		call SYSTEM('cat G.out tests/randn512.in | ./hmatrices matprod >x2.out')
 
-		do i = begin, eind
-			allocate(AH)
-			call makeGHmat(AH, 2**i, gamma)
-			call elemsinHmat(AH, elems)
-			elemslist(1+i-begin) = elems
-			procent(1+i-begin) = elems*1d0/4**i
-			call HM_dealloc(AH)
-		enddo
+		open(10,file='x1.out')
+		call matrixReader(x1, 10)
+		close(10)
+		open(10,file='x2.out')
+		call matrixReader(x2, 10)
+		close(10)
+		diff = (x1%Ut(1,1:512)-x2%Ut(1,1:512))**2
+		fnorm = sum(diff)
+		xnorm = sum(x1%Ut,2)
+		write(*,*) xnorm, fnorm
 
-		do i = beginy, eindy
-			y = i
-			allocate(AH)
-			call makeGHmat(AH, gammatestN, y)
-			call elemsinHmat(AH, elems)
-			elemslisty(1+i-beginy) = elems
-			procenty(1+i-beginy) = elems*1d0/(gammatestN**2)
-			call HM_dealloc(AH)
-		enddo
+! 		do i = begin, eind
+! 			allocate(AH)
+! 			call makeGHmat(AH, 2**i, gamma)
+! 			call elemsinHmat(AH, elems)
+! 			elemslist(1+i-begin) = elems
+! 			procent(1+i-begin) = elems*1d0/4**i
+! 			call HM_dealloc(AH)
+! 		enddo
 
-		do i = 1,eind-begin+1
-			write(*,'(i10, e12.4)') elemslist(i), procent(i)
-		enddo
-		do i = 1,eindy-beginy+1
-			write(*,'(i10, e12.4)') elemslisty(i), procenty(i)
-		enddo
+! 		do i = beginy, eindy
+! 			y = i
+! 			allocate(AH)
+! 			call makeGHmat(AH, gammatestN, y)
+! 			call elemsinHmat(AH, elems)
+! 			elemslisty(1+i-beginy) = elems
+! 			procenty(1+i-beginy) = elems*1d0/(gammatestN**2)
+! 			call HM_dealloc(AH)
+! 		enddo
+
+! 		do i = 1,eind-begin+1
+! 			write(*,'(i10, e12.4)') elemslist(i), procent(i)
+! 		enddo
+! 		do i = 1,eindy-beginy+1
+! 			write(*,'(i10, e12.4)') elemslisty(i), procenty(i)
+! 		enddo
 
 	end subroutine
 
