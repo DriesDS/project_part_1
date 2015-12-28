@@ -63,24 +63,24 @@ contains
 		! diagonal is wide enough
 		if (Dist>s*gamma) then
 			GH%subtypeH = .false.
-! 			!!! uncomment for approximation by formula
-! 			allocate(GH%endmat)
-! 			GH%endmat%full = .false.
-! 			GH%endmat%pointU = .false.
-! 			GH%endmat%pointV = .false.
-! 			allocate(GH%endmat%Ut(k,s),GH%endmat%Vt(k,s))
-! 			call calculateGapprox(GH%endmat, N, beginx, beginy, s)
-! 			!!! \uncomment for approximation by formula
+			!!! uncomment for approximation by formula
+			allocate(GH%endmat)
+			GH%endmat%full = .false.
+			GH%endmat%pointU = .false.
+			GH%endmat%pointV = .false.
+			allocate(GH%endmat%Ut(k,s),GH%endmat%Vt(k,s))
+			call calculateGapprox(GH%endmat, N, beginx, beginy, s)
+			!!! \uncomment for approximation by formula
 
-			!!! uncomment for approximation by svd
-			allocate(fullapprox)
-			fullapprox%full = .true.
-			fullapprox%pointU = .false.
-			allocate(fullapprox%Ut(s,s))
-			call calculateGt(fullapprox%Ut, N, beginx, beginy, s)
-			call lowrank(fullapprox, GH%endmat, rank=k)
-			call M_dealloc(fullapprox)
-			!!! \uncomment for approximation by svd
+! 			!!! uncomment for approximation by svd
+! 			allocate(fullapprox)
+! 			fullapprox%full = .true.
+! 			fullapprox%pointU = .false.
+! 			allocate(fullapprox%Ut(s,s))
+! 			call calculateGt(fullapprox%Ut, N, beginx, beginy, s)
+! 			call lowrank(fullapprox, GH%endmat, rank=k)
+! 			call M_dealloc(fullapprox)
+! 			!!! \uncomment for approximation by svd
 			return
 		endif
 
