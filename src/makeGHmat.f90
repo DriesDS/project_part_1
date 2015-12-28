@@ -86,6 +86,7 @@ contains
 			allocate(GH%endmat)
 			GH%endmat%full = .false.
 			GH%endmat%pointU = .false.
+			GH%endmat%pointV = .false.
 			allocate(GH%endmat%Ut(s, s), GH%endmat%Vt(s,s))
  			call calculateGt(GH%endmat%Ut, N, beginx, beginy, s)
  			GH%endmat%Vt = 0
