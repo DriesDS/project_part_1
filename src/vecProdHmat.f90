@@ -25,7 +25,7 @@ contains
 			return
 		endif
 
-		call makeGHmat(AH, N, gamma)
+		call makeGHmat(AH, N, gamma, flops)
 
 		call recvecProdHmat(AH, N, vec, prodmat, flops)
 
