@@ -174,18 +174,14 @@ contains
 		type(HMatrix), pointer :: AH
 
 		if (.not. AH%subtypeH) then
-			write(0,*) "deallocating endmatrix"
 			call M_dealloc(AH%endmat)
-			write(0,*) "matrix deallocated"
 		else
-			write(0,*) "deallocating recursively"
 			call Hm_dealloc(AH%leftup)
 			call Hm_dealloc(AH%rightup)
 			call Hm_dealloc(AH%leftdown)
 			call Hm_dealloc(AH%rightdown)
 		endif
 
-		write(0,*) "deallocating AH"
 		deallocate(AH)
 
 	end subroutine
