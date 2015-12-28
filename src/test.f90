@@ -377,50 +377,21 @@ contains
 				nbflops(i,j) = curnbflops
 			enddo
 		enddo
+		write(0,'(a,t10,i0,t20,i0,t30,i0,t40,i0,t50,i0)') "y = ", 1, 2, 5, 10, 20
 		do i = 1,7
-			write(0,*) nbflops(i,:)
+			write(0,*) "N=", N**(i+4), nbflops(i,:)
 		enddo
 
-! 		call SYSTEM('./hmatrices makeGFull 512 >G.out')
-! 		call SYSTEM('cat tests/randn512.in | ./hmatrices vecProdHmat 512 5 >x1.out')
-! 		call SYSTEM('cat G.out tests/randn512.in | ./hmatrices matprod >x2.out')
-
-! 		open(10,file='x1.out')
-! 		call matrixReader(x1, 10)
-! 		close(10)
-! 		open(10,file='x2.out')
-! 		call matrixReader(x2, 10)
-! 		close(10)
-! 		diff = (x1%Ut(1,1:512)-x2%Ut(1,1:512))**2
-! 		fnorm = sum(diff)
-! 		xnorm = sum(x1%Ut,2)
-! 		write(*,*) xnorm(1), fnorm
-
-! 		do i = begin, eind
-! 			allocate(AH)
-! 			call makeGHmat(AH, 2**i, gamma)
-! 			call elemsinHmat(AH, elems)
-! 			elemslist(1+i-begin) = elems
-! 			procent(1+i-begin) = elems*1d0/4**i
-! 			call HM_dealloc(AH)
-! 		enddo
-
-! 		do i = beginy, eindy
-! 			y = i
-! 			allocate(AH)
-! 			call makeGHmat(AH, gammatestN, y)
-! 			call elemsinHmat(AH, elems)
-! 			elemslisty(1+i-beginy) = elems
-! 			procenty(1+i-beginy) = elems*1d0/(gammatestN**2)
-! 			call HM_dealloc(AH)
-! 		enddo
-
-! 		do i = 1,eind-begin+1
-! 			write(*,'(i10, e12.4)') elemslist(i), procent(i)
-! 		enddo
-! 		do i = 1,eindy-beginy+1
-! 			write(*,'(i10, e12.4)') elemslisty(i), procenty(i)
-! 		enddo
+		do i = 1,6
+			do j = 1,5
+				call norm_vecprod(2**(i+4), gamma(j), curnorm)
+				norm(i,j) = curnorm
+			enddo
+		enddo
+		write(0,'(a,t10,i0,t20,i0,t30,i0,t40,i0,t50,i0)') "y = ", 1, 2, 5, 10, 20
+		do i = 1,6
+			write(0,*) "N=", N**(i+4), norm(i,:)
+		enddo
 
 	end subroutine
 
@@ -439,6 +410,36 @@ contains
 		read(nbfloatsstr,*) nbfloats
 
 	end subroutine
+
+	subroutine norm_vecprod(N,y, diffnorm)
+		type(Matrix), pointer :: x1, x2
+		integer, intent(in) :: N
+		double precision, intent(in) :: y
+		double precision :: diffnorm, prodnorm, xnorm(1), diff(N)
+		character(len=128) :: command
+
+		write(command,'(a,i0,a)') './hmatrices makeGFull ', N, ' >G.out'
+		call SYSTEM(command)
+		write(command,'(a,i0,a,i0,x,e12.4,a)') 'cat tests/randn', N, '.in | ./hmatrices vecProdHmat ', N, y, ' >x1.out'
+		call SYSTEM(command)
+		write(command,'(a,i0,a,i0,x,e12.4,a)') 'cat G.out tests/randn', N, '.in | ./hmatrices matprod >x2.out'
+		call SYSTEM(command)
+
+		open(10,file='x1.out')
+		call matrixReader(x1, 10)
+		close(10)
+		open(10,file='x2.out')
+		call matrixReader(x2, 10)
+		close(10)
+		diff = (x1%Ut(1,1:N)-x2%Ut(1,1:N))**2
+		diffnorm = sum(diff)
+		xnorm = sum(x1%Ut,2)
+		write(*,*)  diffnorm/xnorm(1)
+
+		call M_dealloc(x1)
+		call M_dealloc(x2)
+
+	end subroutine		 
 
 	subroutine loadmatrices(M1, M2, M3, M4, xfield)
 		type(Matrix), pointer :: M1, M2, M3, M4, xfield
