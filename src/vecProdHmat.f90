@@ -29,7 +29,7 @@ contains
 
 		call recvecProdHmat(AH, N, vec, prodmat, flops)
 
-		write(0,'(a,i0)') "het aantal gebruikte flops = ", flops
+		write(0,'(a,i0,a,i0)') "het aantal gebruikte flops = ", flops, "met een volledige matrix zou dit ", 2*N**2-N, " zijn."
 
 	end subroutine
 
@@ -45,7 +45,7 @@ contains
 		if (.not. AH%subtypeH) then
 			call matprod(AH%endmat, vec, prodmat)
 			if (AH%endmat%full) then
-				flops = 2*size(AH%endmat%Ut,1)*2-size(AH%endmat%Ut,1)
+				flops = 2*size(AH%endmat%Ut,1)**2-size(AH%endmat%Ut,1)
 			else
 				flops = 11*size(AH%endmat%Ut,1)-1
 			endif
