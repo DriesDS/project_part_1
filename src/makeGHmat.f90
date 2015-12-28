@@ -138,9 +138,9 @@ contains
 		do j = -1,s-2 ! cause indeces of j go from 0 to N-1
 			arg = pi*(2d0*ister-2d0*(j+beginx)-3d0)/N
 			d = 2d0-2d0*cos((1d0+2d0*(j+beginx)-2d0*ister)*pi/N)
-			mat%Vt(1,j) = -0.5d0*log(d)
-			mat%Vt(2,j) = -1d0*d**(-1.5d0)*sin(arg)
-			mat%Vt(3,j) = 3d0*d**(-2.5d0)*sin(arg)**2-d**(-1.5d0)*cos(arg)
+			mat%Vt(1,j+2) = -0.5d0*log(d)
+			mat%Vt(2,j+2) = -1d0*d**(-1.5d0)*sin(arg)
+			mat%Vt(3,j+2) = 3d0*d**(-2.5d0)*sin(arg)**2-d**(-1.5d0)*cos(arg)
 		enddo
 
 	end subroutine
