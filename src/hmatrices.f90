@@ -86,7 +86,7 @@ program hmatrices
 		read(cmd,*) y
 		call makeGHmat(AH, N, y, elems)
 		call Hm_dealloc(AH)
-		write(0,*) elems
+		write(*,*) elems
 	case('vecProdHmat')
 		allocate(AH)
 		call getarg(currarg,cmd)
@@ -101,7 +101,7 @@ program hmatrices
 		call matrixWriter(B)
 		call M_dealloc(A)
 		call M_dealloc(B)
-		write(0,*) elems
+		write(*,*) elems
 	case default
 		call help()
 	end select
