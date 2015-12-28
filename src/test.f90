@@ -362,14 +362,10 @@ contains
 	end subroutine
 
 	subroutine test4()
-		type(HMatrix), pointer :: AH
-		type(Matrix), pointer :: x1,x2
-		integer, parameter :: begin=5, eind=14, beginy=1, eindy=10, gammatestN=2**10
-		integer :: elems, i, j, elemslist(eind-begin+1), elemslisty(eindy-beginy+1)
+		integer :: elems, i, j
 		integer :: nbflops(7,5), curnbflops
 		double precision, dimension(5), parameter :: gamma= (/ 1d0, 2d0, 5d0, 1d1, 2d1 /)
-		double precision :: y, procent(eind-begin+1), procenty(eindy-beginy+1)
-		double precision :: xnorm(1), fnorm, diff(512)
+		double precision :: norm(6,5), curnorm
 
 		do i = 1,7
 			do j = 1,5
@@ -379,7 +375,7 @@ contains
 		enddo
 		write(0,'(a,t10,i0,t20,i0,t30,i0,t40,i0,t50,i0)') "y = ", 1, 2, 5, 10, 20
 		do i = 1,7
-			write(0,*) "N=", N**(i+4), nbflops(i,:)
+			write(0,*) "N=", 2**(i+4), nbflops(i,:)
 		enddo
 
 		do i = 1,6
@@ -390,7 +386,7 @@ contains
 		enddo
 		write(0,'(a,t10,i0,t20,i0,t30,i0,t40,i0,t50,i0)') "y = ", 1, 2, 5, 10, 20
 		do i = 1,6
-			write(0,*) "N=", N**(i+4), norm(i,:)
+			write(0,*) "N=", 2**(i+4), norm(i,:)
 		enddo
 
 	end subroutine
