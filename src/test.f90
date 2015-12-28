@@ -373,7 +373,7 @@ contains
 				nbflops(i,j) = curnbflops
 			enddo
 		enddo
-		write(0,'(a,t10,i0,t25,i0,t40,i0,t55,i0,t70,i0)') "y = ", 1, 2, 5, 10, 20
+		write(0,'(a,t17,i0,t32,i0,t47,i0,t62,i0,t77,i0)') "y = ", 1, 2, 5, 10, 20
 		do i = 1,7
 			write(0,'(a,i4,t10,5(i15))') "N=", 2**(i+4), nbflops(i,:)
 		enddo
@@ -384,9 +384,9 @@ contains
 				norm(i,j) = curnorm
 			enddo
 		enddo
-		write(0,'(a,t10,i0,t25,i0,t40,i0,t55,i0,t70,i0)') "y = ", 1, 2, 5, 10, 20
+		write(0,'(a,t17,i0,t32,i0,t47,i0,t62,i0,t77,i0)') "y = ", 1, 2, 5, 10, 20
 		do i = 1,5
-			write(0,'(a,i4,t10,5(e10.3))') "N=", 2**(i+4), norm(i,:)
+			write(0,'(a,i4,t10,5(e15.3))') "N=", 2**(i+4), norm(i,:)
 		enddo
 
 	end subroutine
