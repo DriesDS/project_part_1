@@ -6,7 +6,7 @@ module vecProdHmatmod
 
 contains
 
-	subroutine vecProdHmat(AH, N, gamma, vec, prodmat)
+	subroutine vecProdHmat(AH, N, gamma, vec, prodmat, flops)
 		type(HMatrix), pointer :: AH
 		type(Matrix), pointer :: vec, prodmat
 		double precision, intent(in) :: gamma
@@ -28,8 +28,6 @@ contains
 		call makeGHmat(AH, N, gamma)
 
 		call recvecProdHmat(AH, N, vec, prodmat, flops)
-
-		write(0,'(a,i0,a,i0)') "het aantal gebruikte flops = ", flops, ", met een volledige matrix zou dit ", 2*N**2-N, " zijn."
 
 	end subroutine
 

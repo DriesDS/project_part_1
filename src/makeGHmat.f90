@@ -20,12 +20,12 @@ end type
 
 contains
 
-	subroutine makeGHmat(AH, N, gamma)
+	subroutine makeGHmat(AH, N, gamma, elems)
 		type(HMatrix), pointer :: AH
 		integer, intent(in) :: N
 		integer :: elems
 		double precision, intent(in) :: gamma
-		double precision :: NN, delems
+		double precision :: NN
 
 		NN = N
 
@@ -41,9 +41,6 @@ contains
 		call makeGrec(AH, N, 1, 1, N, gamma)
 
 		call elemsinHmat(AH, elems)
-		delems = elems
-		write(0,'(a,i0)') 'number of elements in the matrix: ', elems
-		write(0,'(a,e10.3,a)') 'This is a percentage of ', delems/N/N*100, ' of the elements of the matrix.'
 
 	end subroutine
 

@@ -15,7 +15,7 @@ program hmatrices
 
 	type(Matrix), pointer :: A,B,C
 	type(HMatrix), pointer :: AH
-	integer :: currarg, N
+	integer :: currarg, N, elems
 	character(len=16) :: cmd
 	logical :: timing
 	double precision :: start, total_time, y
@@ -84,8 +84,9 @@ program hmatrices
 		call getarg(currarg,cmd)
 		currarg = currarg+1
 		read(cmd,*) y
-		call makeGHmat(AH, N, y)
+		call makeGHmat(AH, N, y, elems)
 		call Hm_dealloc(AH)
+		write(0,*) elems
 	case('vecProdHmat')
 		allocate(AH)
 		call getarg(currarg,cmd)
@@ -95,11 +96,12 @@ program hmatrices
 		currarg = currarg+1
 		read(cmd,*) y
 		call matrixReader(A)
-		call vecProdHmat(AH, N, y, A, B)
+		call vecProdHmat(AH, N, y, A, B, elems)
 		call Hm_dealloc(AH)
 		call matrixWriter(B)
 		call M_dealloc(A)
 		call M_dealloc(B)
+		write(0,*) elems
 	case default
 		call help()
 	end select
