@@ -2,6 +2,7 @@ module makeGHmatmod
 
 	use matrixconverter
 	use makegfullmod
+	use lowrankmod
 
 implicit none
 
@@ -49,6 +50,7 @@ contains
 	recursive subroutine makeGrec(GH, N, beginx, beginy, s, gamma)
 	! preconditie: N is power of 2
 		type(HMatrix), pointer :: GH
+		type(Matrix), pointer :: fullapprox
 		integer, intent(in) :: N, beginx, beginy, s
 		double precision, intent(in) :: gamma
 		double precision :: ister, jster, Dist
@@ -61,14 +63,24 @@ contains
 		! diagonal is wide enough
 		if (Dist>s*gamma) then
 			GH%subtypeH = .false.
-			allocate(GH%endmat)
-			GH%endmat%full = .false.
-			GH%endmat%pointU = .false.
-			GH%endmat%pointV = .false.
-			allocate(GH%endmat%Ut(k,s),GH%endmat%Vt(k,s))
-			call calculateGapprox(GH%endmat, N, beginx, beginy, s)
-			!write(*,*) 'making approximation, beginx = ', beginx, 'beginy = ', beginy, 's = ', s
-			!call matrixWriter(GH%endmat)
+! 			!!! uncomment for approximation by formula
+! 			allocate(GH%endmat)
+! 			GH%endmat%full = .false.
+! 			GH%endmat%pointU = .false.
+! 			GH%endmat%pointV = .false.
+! 			allocate(GH%endmat%Ut(k,s),GH%endmat%Vt(k,s))
+! 			call calculateGapprox(GH%endmat, N, beginx, beginy, s)
+! 			!!! \uncomment for approximation by formula
+
+			!!! uncomment for approximation by svd
+			allocate(fullapprox)
+			fullapprox%full = .true.
+			fullapprox%pointU = .false.
+			allocate(fullapprox%Ut(s,s))
+			call calculateGt(fullapprox%Ut, N, beginx, beginy, s)
+			call lowrank(fullapprox, GH%endmat, rank=k)
+			call M_dealloc(fullapprox)
+			!!! \uncomment for approximation by svd
 			return
 		endif
 
