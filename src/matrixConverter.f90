@@ -129,7 +129,7 @@ contains
 			write(0,*) "2"
 			nullify(A%Ut)
 		else
-			write(0,*) "3, ", allocated(A%Ut)
+			write(0,*) "3, ", size(A%Ut,1)
 			deallocate(A%Ut)
 		endif
 
