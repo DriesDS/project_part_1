@@ -63,6 +63,7 @@ contains
 		! makeing a rank-k approximation of the matrix when the distance to the
 		! diagonal is wide enough
 		if (Dist>s*gamma) then
+			write(*,*) ":::::: ", beginx, beginy, s
 			GH%subtypeH = .false.
 ! 			!!! uncomment for approximation by formula
 ! 			allocate(GH%endmat)
@@ -83,6 +84,7 @@ contains
 ! 			call M_dealloc(fullapprox)
 ! 			!!! \uncomment for approximation by svd
 
+			!!! uncomment for full matrix use
 			allocate(GH%endmat)
 			GH%endmat%full = .false.
 			GH%endmat%pointU = .false.
@@ -91,6 +93,7 @@ contains
  			call calculateGt(GH%endmat%Ut, N, beginx, beginy, s)
  			GH%endmat%Vt = 0
  			forall(j=1:s) GH%endmat%Vt(j,j) = 1
+			!!! \uncomment for full matrix use
 
 			return
 		endif
