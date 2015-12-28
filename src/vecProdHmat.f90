@@ -29,7 +29,7 @@ contains
 
 		call recvecProdHmat(AH, N, vec, prodmat, flops)
 
-		write(0,'(a,i0,a,i0)') "het aantal gebruikte flops = ", flops, "met een volledige matrix zou dit ", 2*N**2-N, " zijn."
+		write(0,'(a,i0,a,i0)') "het aantal gebruikte flops = ", flops, ", met een volledige matrix zou dit ", 2*N**2-N, " zijn."
 
 	end subroutine
 
