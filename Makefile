@@ -78,5 +78,5 @@ vecProdHmat.o: $(src)/vecProdHmat.f90 matrixconverter.mod makeghmatmod.mod
 vecprodhmatmod.mod: $(src)/vecProdHmat.f90 vecProdHmat.o
 	$(FC) -c $(FFLAGS) $(src)/vecProdHmat.f90
 
-clean:
-	rm $(objects) $(modules)
+# clean:
+# 	rm $(objects) $(modules)
