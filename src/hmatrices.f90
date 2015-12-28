@@ -97,6 +97,8 @@ program hmatrices
 		call matrixReader(A)
 		call vecProdHmat(AH, N, y, A)
 		call Hm_dealloc(AH)
+		call matrixWriter(prodmat)
+		call M_dealloc(prodmat)
 	case default
 		call help()
 	end select
