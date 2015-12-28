@@ -371,7 +371,7 @@ contains
 		double precision :: xnorm(1), fnorm, diff(512)
 
 		call SYSTEM('./hmatrices makeGFull 512 >G.out')
-		call SYSTEM('cat test/randn512.in | ./hmatrices vecProdHmat 512 5 >x1.out')
+		call SYSTEM('cat tests/randn512.in | ./hmatrices vecProdHmat 512 5 >x1.out')
 		call SYSTEM('cat G.out tests/randn512.in | ./hmatrices matprod >x2.out')
 
 		open(10,file='x1.out')
