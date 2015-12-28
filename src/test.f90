@@ -437,7 +437,7 @@ contains
 		open(10,file='./flops.out')
 		read(10,*) nbfloatsstr
 		close(10)
-		read(nbfloats,*) nbfloats
+		read(nbfloatsstr,*) nbfloats
 
 	end subroutine
 
