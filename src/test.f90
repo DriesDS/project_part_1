@@ -366,24 +366,35 @@ contains
 		type(Matrix), pointer :: x1,x2
 		integer, parameter :: begin=5, eind=14, beginy=1, eindy=10, gammatestN=2**10
 		integer :: elems, i, elemslist(eind-begin+1), elemslisty(eindy-beginy+1)
-		double precision, parameter :: gamma=5d0
+		integer :: nbflops(7,5), curnbflops
+		double precision, dimension(5), parameter :: gamma= (/ 1d0, 2d0, 5d0, 1d1, 2d1 /)
 		double precision :: y, procent(eind-begin+1), procenty(eindy-beginy+1)
 		double precision :: xnorm(1), fnorm, diff(512)
 
-		call SYSTEM('./hmatrices makeGFull 512 >G.out')
-		call SYSTEM('cat tests/randn512.in | ./hmatrices vecProdHmat 512 5 >x1.out')
-		call SYSTEM('cat G.out tests/randn512.in | ./hmatrices matprod >x2.out')
+		do i = 1,7
+			do j = 1,5
+				call flops_amount(2**(i+4), gamma(j), curnbflops)
+				nbflops(i,j) = curnbflops
+			enddo
+		enddo
+		do i = 1,7
+			write(0,*) nbflops(i,:)
+		enddo
 
-		open(10,file='x1.out')
-		call matrixReader(x1, 10)
-		close(10)
-		open(10,file='x2.out')
-		call matrixReader(x2, 10)
-		close(10)
-		diff = (x1%Ut(1,1:512)-x2%Ut(1,1:512))**2
-		fnorm = sum(diff)
-		xnorm = sum(x1%Ut,2)
-		write(*,*) xnorm(1), fnorm
+! 		call SYSTEM('./hmatrices makeGFull 512 >G.out')
+! 		call SYSTEM('cat tests/randn512.in | ./hmatrices vecProdHmat 512 5 >x1.out')
+! 		call SYSTEM('cat G.out tests/randn512.in | ./hmatrices matprod >x2.out')
+
+! 		open(10,file='x1.out')
+! 		call matrixReader(x1, 10)
+! 		close(10)
+! 		open(10,file='x2.out')
+! 		call matrixReader(x2, 10)
+! 		close(10)
+! 		diff = (x1%Ut(1,1:512)-x2%Ut(1,1:512))**2
+! 		fnorm = sum(diff)
+! 		xnorm = sum(x1%Ut,2)
+! 		write(*,*) xnorm(1), fnorm
 
 ! 		do i = begin, eind
 ! 			allocate(AH)
@@ -410,6 +421,22 @@ contains
 ! 		do i = 1,eindy-beginy+1
 ! 			write(*,'(i10, e12.4)') elemslisty(i), procenty(i)
 ! 		enddo
+
+	end subroutine
+
+	subroutine flops_amount(N,y, nbfloats)
+		integer, intent(in) :: N
+		double precision, intent(in) :: y
+		integer :: nbfloats
+		character(len=128) :: command
+		character(len=16) :: nbfloatsstr
+
+		write(command,'(a,i0,x,e12.4,a)') './hmatrices makeGFull ', N, y, ' >flops.out'
+		call SYSTEM(command)
+		open(10,file='flops.out')
+		read(10,*) nbfloatsstr
+		close(10)
+		read(nbfloats,*) nbfloats
 
 	end subroutine
 
