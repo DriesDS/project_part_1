@@ -430,7 +430,7 @@ contains
 		diff = (x1%Ut(1,1:N)-x2%Ut(1,1:N))**2
 		diffnorm = sum(diff)
 		xnorm = sum(x1%Ut,2)
-		write(*,*)  diffnorm/xnorm(1)
+		diffnorm = diffnorm/xnorm(1)
 
 		call M_dealloc(x1)
 		call M_dealloc(x2)
