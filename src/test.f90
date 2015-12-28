@@ -368,7 +368,7 @@ contains
 		integer :: elems, i, elemslist(eind-begin+1), elemslisty(eindy-beginy+1)
 		double precision, parameter :: gamma=5d0
 		double precision :: y, procent(eind-begin+1), procenty(eindy-beginy+1)
-		double precision :: xnorm, fnorm, diff(512)
+		double precision :: xnorm(1), fnorm, diff(512)
 
 		call SYSTEM('./hmatrices makeGFull 512 >G.out')
 		call SYSTEM('cat test/randn512.in | ./hmatrices vecProdHmat 512 5 >x1.out')
@@ -383,7 +383,7 @@ contains
 		diff = (x1%Ut(1,1:512)-x2%Ut(1,1:512))**2
 		fnorm = sum(diff)
 		xnorm = sum(x1%Ut,2)
-		write(*,*) xnorm, fnorm
+		write(*,*) xnorm(1), fnorm
 
 ! 		do i = begin, eind
 ! 			allocate(AH)
