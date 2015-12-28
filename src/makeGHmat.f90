@@ -64,49 +64,34 @@ contains
 		! diagonal is wide enough
 		if (Dist>s*gamma) then
 			GH%subtypeH = .false.
-! 			!!! uncomment for approximation by formula
-! 			allocate(GH%endmat)
-! 			GH%endmat%full = .false.
-! 			GH%endmat%pointU = .false.
-! 			GH%endmat%pointV = .false.
-! 			allocate(GH%endmat%Ut(k,s),GH%endmat%Vt(k,s))
-! 			call calculateGapprox(GH%endmat, N, beginx, beginy, s)
-! 			!!! \uncomment for approximation by formula
-
-			!!! uncomment for approximation by svd
-			allocate(fullapprox)
+			!!! uncomment for approximation by formula
 			allocate(GH%endmat)
-			fullapprox%full = .true.
-			fullapprox%pointU = .false.
 			GH%endmat%full = .false.
 			GH%endmat%pointU = .false.
 			GH%endmat%pointV = .false.
-			allocate(fullapprox%Ut(s,s))
 			allocate(GH%endmat%Ut(k,s),GH%endmat%Vt(k,s))
+			call calculateGapprox(GH%endmat, N, beginx, beginy, s)
+			!!! \uncomment for approximation by formula
 
-			call calculateGt(fullapprox%Ut, N, beginx, beginy, s)
-			call lowrank(fullapprox, rankapprox, rank=k)
-			
-			GH%endmat%Ut(1:k, 1:s) = rankapprox%Ut(1:k, 1:s)
-			GH%endmat%Vt(1:k, 1:s) = rankapprox%vt(1:k, 1:s)
-! 			if (s==16 .and. beginx == 257 .and. beginy == 433) then
-! 				call matrixWriter(fullapprox)
-! 				call matrixWriter(GH%endmat)
-! 			endif
-			call M_dealloc(rankapprox)
-			call M_dealloc(fullapprox)
-			!!! \uncomment for approximation by svd
-
-! 			!!! uncomment for full matrix use
+! 			!!! uncomment for approximation by svd
+! 			allocate(fullapprox)
 ! 			allocate(GH%endmat)
+! 			fullapprox%full = .true.
+! 			fullapprox%pointU = .false.
 ! 			GH%endmat%full = .false.
 ! 			GH%endmat%pointU = .false.
 ! 			GH%endmat%pointV = .false.
-! 			allocate(GH%endmat%Ut(s, s), GH%endmat%Vt(s,s))
-!  			call calculateGt(GH%endmat%Ut, N, beginx, beginy, s)
-!  			GH%endmat%Vt = 0
-!  			forall(j=1:s) GH%endmat%Vt(j,j) = 1
-! 			!!! \uncomment for full matrix use
+! 			allocate(fullapprox%Ut(s,s))
+! 			allocate(GH%endmat%Ut(k,s),GH%endmat%Vt(k,s))
+
+! 			call calculateGt(fullapprox%Ut, N, beginx, beginy, s)
+! 			call lowrank(fullapprox, rankapprox, rank=k)
+
+! 			GH%endmat%Ut(1:k, 1:s) = rankapprox%Ut(1:k, 1:s)
+! 			GH%endmat%Vt(1:k, 1:s) = rankapprox%vt(1:k, 1:s)
+! 			call M_dealloc(rankapprox)
+! 			call M_dealloc(fullapprox)
+! 			!!! \uncomment for approximation by svd
 
 			return
 		endif
