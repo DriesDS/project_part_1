@@ -365,8 +365,8 @@ contains
 		type(HMatrix), pointer :: AH
 		type(Matrix), pointer :: x1,x2
 		integer, parameter :: begin=5, eind=14, beginy=1, eindy=10, gammatestN=2**10
-		integer :: elems, i, elemslist(eind-begin+1), elemslisty(eindy-beginy+1)
-		integer :: nbflops(7,5), curnbflops, i, j
+		integer :: elems, i, j, elemslist(eind-begin+1), elemslisty(eindy-beginy+1)
+		integer :: nbflops(7,5), curnbflops
 		double precision, dimension(5), parameter :: gamma= (/ 1d0, 2d0, 5d0, 1d1, 2d1 /)
 		double precision :: y, procent(eind-begin+1), procenty(eindy-beginy+1)
 		double precision :: xnorm(1), fnorm, diff(512)
