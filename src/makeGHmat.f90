@@ -72,15 +72,22 @@ contains
 ! 			call calculateGapprox(GH%endmat, N, beginx, beginy, s)
 ! 			!!! \uncomment for approximation by formula
 
-			!!! uncomment for approximation by svd
-			allocate(fullapprox)
-			fullapprox%full = .true.
-			fullapprox%pointU = .false.
-			allocate(fullapprox%Ut(s,s))
-			call calculateGt(fullapprox%Ut, N, beginx, beginy, s)
-			call lowrank(fullapprox, GH%endmat, rank=k)
-			call M_dealloc(fullapprox)
-			!!! \uncomment for approximation by svd
+! 			!!! uncomment for approximation by svd
+! 			allocate(fullapprox)
+! 			fullapprox%full = .true.
+! 			fullapprox%pointU = .false.
+! 			allocate(fullapprox%Ut(s,s))
+! 			call calculateGt(fullapprox%Ut, N, beginx, beginy, s)
+! 			call lowrank(fullapprox, GH%endmat, rank=k)
+! 			call M_dealloc(fullapprox)
+! 			!!! \uncomment for approximation by svd
+
+			allocate(GH%endmat)
+			GH%endmat%full = .true.
+			GH%endmat%pointU = .false.
+			allocate(GH%endmat%Ut(s, s))
+ 			call calculateGt(GH%endmat%Ut, N, beginx, beginy, s)
+
 			return
 		endif
 
