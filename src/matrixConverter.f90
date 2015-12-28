@@ -124,20 +124,27 @@ contains
 	subroutine M_dealloc(A)
 		type(Matrix), pointer :: A
 
+		write(0,*) "1"
 		if (A%pointU) then
+			write(0,*) "2"
 			nullify(A%Ut)
 		else
+			write(0,*) "3"
 			deallocate(A%Ut)
 		endif
 
 		if (.not.A%full) then
+			write(0,*) "4"
 			if (A%pointV) then
+				write(0,*) "5"
 				nullify(A%Vt)
 			else
+				write(0,*) "6"
 				deallocate(A%Vt)
 			endif
 		endif
 
+		write(0,*) "7"
 		deallocate(A)
 
 	end subroutine
