@@ -98,6 +98,7 @@ program hmatrices
 		call vecProdHmat(AH, N, y, A, B)
 		call Hm_dealloc(AH)
 		call matrixWriter(B)
+		call M_dealloc(A)
 		call M_dealloc(B)
 	case default
 		call help()
