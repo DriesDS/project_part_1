@@ -95,10 +95,10 @@ program hmatrices
 		currarg = currarg+1
 		read(cmd,*) y
 		call matrixReader(A)
-		call vecProdHmat(AH, N, y, A)
+		call vecProdHmat(AH, N, y, A, B)
 		call Hm_dealloc(AH)
-		call matrixWriter(prodmat)
-		call M_dealloc(prodmat)
+		call matrixWriter(B)
+		call M_dealloc(B)
 	case default
 		call help()
 	end select
