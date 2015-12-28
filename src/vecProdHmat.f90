@@ -6,7 +6,7 @@ module vecProdHmatmod
 
 contains
 
-	subroutine vecProdHmat(AH, N, gamma, vec)
+	subroutine vecProdHmat(AH, N, gamma, vec, prodmat)
 		type(HMatrix), pointer :: AH
 		type(Matrix), pointer :: vec, prodmat
 		double precision, intent(in) :: gamma
@@ -28,8 +28,6 @@ contains
 		call makeGHmat(AH, N, gamma)
 
 		call recvecProdHmat(AH, N, vec, prodmat, flops)
-
-		call matrixWriter(prodmat)
 
 	end subroutine
 
