@@ -96,6 +96,7 @@ program hmatrices
 		read(cmd,*) y
 		call matrixReader(A)
 		call vecProdHmat(AH, N, y, A)
+		call Hm_dealloc(AH)
 	case default
 		call help()
 	end select
