@@ -378,14 +378,14 @@ contains
 			write(0,*) "N=", 2**(i+4), nbflops(i,:)
 		enddo
 
-		do i = 1,6
+		do i = 1,5
 			do j = 1,5
 				call norm_vecprod(2**(i+4), gamma(j), curnorm)
 				norm(i,j) = curnorm
 			enddo
 		enddo
 		write(0,'(a,t10,i0,t20,i0,t30,i0,t40,i0,t50,i0)') "y = ", 1, 2, 5, 10, 20
-		do i = 1,6
+		do i = 1,5
 			write(0,*) "N=", 2**(i+4), norm(i,:)
 		enddo
 
