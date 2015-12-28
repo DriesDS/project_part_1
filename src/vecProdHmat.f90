@@ -19,7 +19,7 @@ contains
 			return
 		endif
 
-		if (vec%full == .false. .or. size(vec%Ut,2) .ne. N) then
+		if (.not. vec%full .or. size(vec%Ut,2) .ne. N) then
 			write(0,*) 'Invalid size of matrix.'
 			return
 		endif

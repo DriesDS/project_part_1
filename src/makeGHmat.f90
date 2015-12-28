@@ -62,14 +62,11 @@ contains
 		if (Dist>s*gamma) then
 			GH%subtypeH = .false.
 			allocate(GH%endmat)
-			!GH%endmat%full = .false.
-			GH%endmat%full = .true.
+			GH%endmat%full = .false.
 			GH%endmat%pointU = .false.
-			!GH%endmat%pointV = .false.
-			!allocate(GH%endmat%Ut(k,s),GH%endmat%Vt(k,s))
-			allocate(GH%endmat%Ut(s,s))
-			call calculateGt(GH%endmat%Ut, N, beginx, beginy, s)
-			!call calculateGapprox(GH%endmat, N, beginx, beginy, s)
+			GH%endmat%pointV = .false.
+			allocate(GH%endmat%Ut(k,s),GH%endmat%Vt(k,s))
+			call calculateGapprox(GH%endmat, N, beginx, beginy, s)
 			!write(*,*) 'making approximation, beginx = ', beginx, 'beginy = ', beginy, 's = ', s
 			!call matrixWriter(GH%endmat)
 			return
@@ -108,18 +105,18 @@ contains
 
 		ister = beginy + s*1d0/2 - 0.5d0
 
-		do i = 1,s
-			mat%Ut(1,i) = 1d0
-			mat%Ut(2,i) = 2*pi*(beginy -1 + i - ister)/N
-			mat%Ut(3,i) = mat%Ut(2,i)**2 / 2
+		do i = 0,s-1
+			mat%Ut(1,i+1) = 1d0
+			mat%Ut(2,i+1) = 2*pi*(beginy+i - ister)/N
+			mat%Ut(3,i+1) = mat%Ut(2,i+1)**2 / 2
 		enddo
 
-		do j = 1,s
-			arg = pi*(2d0*ister-2d0*(j+beginx)-1d0)/N
-			d = 2*(1-cos((-1d0+2d0*(j+beginx)-2d0*ister)*pi/N))
+		do j = -1,s-2 ! cause indeces of j go from 0 to N-1
+			arg = pi*(2d0*ister-2d0*(j+beginx)-3d0)/N
+			d = 2d0-2d0*cos((1d0+2d0*(j+beginx)-2d0*ister)*pi/N)
 			mat%Vt(1,j) = -0.5d0*log(d)
-			mat%Vt(2,j) = -1d0*d**(-3)*sin(arg)
-			mat%Vt(3,j) = 3d0*d**(-5)*sin(arg)**2-d**(-3)*cos(arg)
+			mat%Vt(2,j) = -1d0*d**(-1.5d0)*sin(arg)
+			mat%Vt(3,j) = 3d0*d**(-2.5d0)*sin(arg)**2-d**(-1.5d0)*cos(arg)
 		enddo
 
 	end subroutine
