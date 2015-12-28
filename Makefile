@@ -18,7 +18,7 @@ FFLAGS=$(FFLAGS_$(FC))
 
 hmatrices: $(objects)
 	$(FC) -o hmatrices $(objects) $(options)
-	make clean
+#	make clean
 
 hmatrices.o: $(src)/hmatrices.f90 $(modules)
 	$(FC) -c $(FFLAGS) $(src)/hmatrices.f90
