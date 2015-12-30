@@ -389,7 +389,7 @@ contains
 		write(0,*) "the amount of flops used in a product with an H-matrix."
 		write(0,'(a,t17,i0,t32,i0,t47,i0,t62,i0,t77,i0)') "y = ", 1, 2, 5, 10, 20
 		do i = 1,5
-			write(0,'(a,i4,t10,5(e15.3))') "N=", 2**(i+4), flops(i,:)
+			write(0,'(a,i4,t10,5(i0))') "N=", 2**(i+4), flops(i,:)
 		enddo
 
 		write(0,*) "the Frobenius norm of the difference divided by the Frobenius"
