@@ -430,11 +430,8 @@ contains
 		write(command,'(a,i0,a,i0,x,e12.4,a)') 'cat G.out tests/randn', N, '.in | ./hmatrices matprod >x2.out'
 		call SYSTEM(command)
 
-		write(command,'(a,i0,a,i0,x,e12.4,a)') 'cat tests/randn', N, '.in | ./hmatrices -t vecProdHmat ', N, y, ' >x1.out'
-
-		do i = 1,100
-			call SYSTEM(command)
-		enddo
+		write(command,'(a,i0,a,i0,x,e12.4,a)') 'cat tests/randn', N, '.in | ./hmatrices vecProdHmat ', N, y, ' >x1.out'
+		call SYSTEM(command)
 
 		open(10,file='x1.out')
 		call matrixReader(x1, 10)
