@@ -362,30 +362,38 @@ contains
 	end subroutine
 
 	subroutine test4()
-		integer :: elems, i, j
-		integer :: nbflops(7,5), curnbflops
+		integer :: elems, i, j, flops(5,5), curflops
+		integer :: nbfloats(7,5), curnbfloats
 		double precision, dimension(5), parameter :: gamma= (/ 1d0, 2d0, 5d0, 1d1, 2d1 /)
 		double precision :: norm(5,5), curnorm
 
 		do i = 1,7
 			do j = 1,5
-				call flops_amount(2**(i+4), gamma(j), curnbflops)
-				nbflops(i,j) = curnbflops
+				call flops_amount(2**(i+4), gamma(j), curnbfloats)
+				nbfloats(i,j) = curnbfloats
 			enddo
 		enddo
 		write(0,*) "the amount of floats used in an H-matrix:"
 		write(0,'(a,t17,i0,t32,i0,t47,i0,t62,i0,t77,i0)') "y = ", 1, 2, 5, 10, 20
 		do i = 1,7
-			write(0,'(a,i4,t10,5(i15))') "N=", 2**(i+4), nbflops(i,:)
+			write(0,'(a,i4,t10,5(i15))') "N=", 2**(i+4), nbfloats(i,:)
 		enddo
 
 		do i = 1,5
 			do j = 1,5
-				call norm_vecprod(2**(i+4), gamma(j), curnorm)
+				call norm_vecprod(2**(i+4), gamma(j), curnorm, curflops)
 				norm(i,j) = curnorm
+				flops(i,j) = curflops
 			enddo
 		enddo
 		write(0,*) "the amount of flops used in a product with an H-matrix."
+		write(0,'(a,t17,i0,t32,i0,t47,i0,t62,i0,t77,i0)') "y = ", 1, 2, 5, 10, 20
+		do i = 1,5
+			write(0,'(a,i4,t10,5(e15.3))') "N=", 2**(i+4), flops(i,:)
+		enddo
+
+		write(0,*) "the Frobenius norm of the difference divided by the Frobenius"
+		write(0,*) "norm of the right solution"
 		write(0,'(a,t17,i0,t32,i0,t47,i0,t62,i0,t77,i0)') "y = ", 1, 2, 5, 10, 20
 		do i = 1,5
 			write(0,'(a,i4,t10,5(e15.3))') "N=", 2**(i+4), norm(i,:)
@@ -409,9 +417,9 @@ contains
 
 	end subroutine
 
-	subroutine norm_vecprod(N,y, diffnorm)
+	subroutine norm_vecprod(N,y, diffnorm, flops)
 		type(Matrix), pointer :: x1, x2
-		integer, intent(in) :: N
+		integer, intent(in) :: N, flops
 		double precision, intent(in) :: y
 		double precision :: diffnorm, start, prodnorm, xnorm(1), diff(N)
 		character(len=128) :: command
@@ -426,6 +434,7 @@ contains
 
 		open(10,file='x1.out')
 		call matrixReader(x1, 10)
+		read(10,*) flops
 		close(10)
 		open(10,file='x2.out')
 		call matrixReader(x2, 10)
