@@ -364,7 +364,7 @@ contains
 	subroutine test4()
 		integer :: elems, i, j
 		integer :: nbflops(7,5), curnbflops
-		real :: curcputime, cputime(5,5)
+		integer :: curcputime, cputime(5,5)
 		double precision, dimension(5), parameter :: gamma= (/ 1d0, 2d0, 5d0, 1d1, 2d1 /)
 		double precision :: norm(5,5), curnorm
 
@@ -422,7 +422,7 @@ contains
 		integer, intent(in) :: N
 		double precision, intent(in) :: y
 		double precision :: diffnorm, start, prodnorm, xnorm(1), diff(N)
-		real :: cputime, cpuarray(2), cpustart
+		integer :: cputime, cpuarray(2), cpustart
 		character(len=128) :: command
 
 		write(command,'(a,i0,a)') './hmatrices makeGFull ', N, ' >G.out'
@@ -430,10 +430,10 @@ contains
 		write(command,'(a,i0,a,i0,x,e12.4,a)') 'cat G.out tests/randn', N, '.in | ./hmatrices matprod >x2.out'
 		call SYSTEM(command)
 
-		call ETIME(cpuarray, cpustart)
+		call TIME(cpustart)
 		write(command,'(a,i0,a,i0,x,e12.4,a)') 'cat tests/randn', N, '.in | ./hmatrices vecProdHmat ', N, y, ' >x1.out'
 		call SYSTEM(command)
-		call ETIME(cpuarray, cputime)
+		call TIME(cputime)
 		cputime = cputime-cpustart
 
 		open(10,file='x1.out')
