@@ -425,12 +425,11 @@ contains
 
 		write(command,'(a,i0,a)') './hmatrices makeGFull ', N, ' >G.out'
 		call SYSTEM(command)
+		write(command,'(a,i0,a,i0,x,e12.4,a)') 'cat G.out tests/randn', N, '.in | ./hmatrices matprod >x2.out'
+		call SYSTEM(command)
+
 		call CPU_TIME(start)
 		write(command,'(a,i0,a,i0,x,e12.4,a)') 'cat tests/randn', N, '.in | ./hmatrices vecProdHmat ', N, y, ' >x1.out'
-		call SYSTEM(command)
-		call CPU_TIME(cputime)
-		cputime = cputime-start
-		write(command,'(a,i0,a,i0,x,e12.4,a)') 'cat G.out tests/randn', N, '.in | ./hmatrices matprod >x2.out'
 		call SYSTEM(command)
 
 		open(10,file='x1.out')
@@ -439,6 +438,8 @@ contains
 		open(10,file='x2.out')
 		call matrixReader(x2, 10)
 		close(10)
+		call CPU_TIME(cputime)
+		cputime = cputime-start
 		diff = (x1%Ut(1,1:N)-x2%Ut(1,1:N))**2
 		diffnorm = sum(diff)
 		xnorm = sum(x1%Ut,2)
