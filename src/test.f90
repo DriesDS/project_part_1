@@ -364,8 +364,9 @@ contains
 	subroutine test4()
 		integer :: elems, i, j
 		integer :: nbflops(7,5), curnbflops
+		real :: curcputime, cputime(5,5), start
 		double precision, dimension(5), parameter :: gamma= (/ 1d0, 2d0, 5d0, 1d1, 2d1 /)
-		double precision :: norm(5,5), curnorm, curcputime, cputime(5,5), start
+		double precision :: norm(5,5), curnorm
 
 		do i = 1,7
 			do j = 1,5
