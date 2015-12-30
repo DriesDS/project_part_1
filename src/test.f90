@@ -364,7 +364,6 @@ contains
 	subroutine test4()
 		integer :: elems, i, j
 		integer :: nbflops(7,5), curnbflops
-		integer :: curcputime, cputime(5,5)
 		double precision, dimension(5), parameter :: gamma= (/ 1d0, 2d0, 5d0, 1d1, 2d1 /)
 		double precision :: norm(5,5), curnorm
 
@@ -382,21 +381,14 @@ contains
 
 		do i = 1,5
 			do j = 1,5
-				call norm_vecprod(2**(i+4), gamma(j), curnorm, curcputime)
+				call norm_vecprod(2**(i+4), gamma(j), curnorm)
 				norm(i,j) = curnorm
-				cputime(i,j) = curcputime
 			enddo
 		enddo
 		write(0,*) "the amount of flops used in a product with an H-matrix."
 		write(0,'(a,t17,i0,t32,i0,t47,i0,t62,i0,t77,i0)') "y = ", 1, 2, 5, 10, 20
 		do i = 1,5
 			write(0,'(a,i4,t10,5(e15.3))') "N=", 2**(i+4), norm(i,:)
-		enddo
-
-		write(0,*) "the amount of time the product took"
-		write(0,'(a,t17,i0,t32,i0,t47,i0,t62,i0,t77,i0)') "y = ", 1, 2, 5, 10, 20
-		do i = 1,5
-			write(0,'(a,i4,t10,5(e15.3))') "N=", 2**(i+4), cputime(i,:)
 		enddo
 
 	end subroutine
@@ -417,12 +409,11 @@ contains
 
 	end subroutine
 
-	subroutine norm_vecprod(N,y, diffnorm, cputime)
+	subroutine norm_vecprod(N,y, diffnorm)
 		type(Matrix), pointer :: x1, x2
 		integer, intent(in) :: N
 		double precision, intent(in) :: y
 		double precision :: diffnorm, start, prodnorm, xnorm(1), diff(N)
-		integer :: cputime, cpuarray(2), cpustart
 		character(len=128) :: command
 
 		write(command,'(a,i0,a)') './hmatrices makeGFull ', N, ' >G.out'
@@ -430,11 +421,8 @@ contains
 		write(command,'(a,i0,a,i0,x,e12.4,a)') 'cat G.out tests/randn', N, '.in | ./hmatrices matprod >x2.out'
 		call SYSTEM(command)
 
-		call TIME(cpustart)
 		write(command,'(a,i0,a,i0,x,e12.4,a)') 'cat tests/randn', N, '.in | ./hmatrices -t vecProdHmat ', N, y, ' >x1.out'
 		call SYSTEM(command)
-		call TIME(cputime)
-		cputime = cputime-cpustart
 
 		open(10,file='x1.out')
 		call matrixReader(x1, 10)
