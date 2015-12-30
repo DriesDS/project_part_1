@@ -429,10 +429,10 @@ contains
 		call SYSTEM(command)
 		write(command,'(a,i0,a,i0,x,e12.4,a)') 'cat G.out tests/randn', N, '.in | ./hmatrices matprod >x2.out'
 		call SYSTEM(command)
-		call CPU_TIME(cputime)
-		cputime = cputime-start
 
 		open(10,file='x1.out')
+		call CPU_TIME(cputime)
+		cputime = cputime-start
 		call matrixReader(x1, 10)
 		close(10)
 		open(10,file='x2.out')
