@@ -385,7 +385,7 @@ contains
 				call norm_vecprod(2**(i+4), gamma(j), curnorm, curcputime)
 				norm(i,j) = curnorm
 				call CPU_TIME(curcputime)
-				curcputime = cputime-start
+				curcputime = curcputime-start
 				cputime(i,j) = curcputime
 			enddo
 		enddo
