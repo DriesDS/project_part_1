@@ -69,3 +69,8 @@
 
 		plotField N:
 			Reads as in solveIntFull a 2xL matrix x and 
+
+	The option -t gives the CPU time taken by the command on stdout. If it
+	is used in combination with test this will not return an exact CPU time
+	because this routine uses an external system call which is not timed
+	included in the timing.

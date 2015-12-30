@@ -28,7 +28,6 @@ program hmatrices
 
 	if (cmd == '-t') then
 		call CPU_TIME(start)
-		write(0,*) "START!"
 		call getarg(currarg,cmd)
 		currarg = currarg+1
 		timing = .true.
@@ -109,7 +108,6 @@ program hmatrices
 
 	if (timing) then
 		call CPU_TIME(total_time)
-		write(0,*) "STOP!"
 		total_time = total_time-start
 		write(0,*) 'CPU_TIME: ', total_time
 	endif

@@ -364,9 +364,8 @@ contains
 	subroutine test4()
 		integer :: elems, i, j
 		integer :: nbflops(7,5), curnbflops
-		real :: curcputime, cputime(5,5), start
 		double precision, dimension(5), parameter :: gamma= (/ 1d0, 2d0, 5d0, 1d1, 2d1 /)
-		double precision :: norm(5,5), curnorm
+		double precision :: norm(5,5), curnorm, curcputime, cputime(5,5)
 
 		do i = 1,7
 			do j = 1,5
@@ -382,13 +381,8 @@ contains
 
 		do i = 1,5
 			do j = 1,5
-				call CPU_TIME(start)
-				write(0,*) "calling CPU time"
 				call norm_vecprod(2**(i+4), gamma(j), curnorm, curcputime)
 				norm(i,j) = curnorm
-				call CPU_TIME(curcputime)
-				write(0,*) "done"
-				curcputime = curcputime-start
 				cputime(i,j) = curcputime
 			enddo
 		enddo
@@ -425,9 +419,8 @@ contains
 	subroutine norm_vecprod(N,y, diffnorm, cputime)
 		type(Matrix), pointer :: x1, x2
 		integer, intent(in) :: N
-		real :: cputime
 		double precision, intent(in) :: y
-		double precision :: diffnorm, start, prodnorm, xnorm(1), diff(N)
+		double precision :: diffnorm, start, prodnorm, xnorm(1), diff(N), cputime, cpuarray(2), cpustart
 		character(len=128) :: command
 
 		write(command,'(a,i0,a)') './hmatrices makeGFull ', N, ' >G.out'
@@ -435,8 +428,11 @@ contains
 		write(command,'(a,i0,a,i0,x,e12.4,a)') 'cat G.out tests/randn', N, '.in | ./hmatrices matprod >x2.out'
 		call SYSTEM(command)
 
+		call ETIME(cpuarray, cpustart)
 		write(command,'(a,i0,a,i0,x,e12.4,a)') 'cat tests/randn', N, '.in | ./hmatrices vecProdHmat ', N, y, ' >x1.out'
 		call SYSTEM(command)
+		call ETIME(cpuarray, cputime)
+		cputime = cputime-cpustart
 
 		open(10,file='x1.out')
 		call matrixReader(x1, 10)
