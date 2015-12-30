@@ -364,8 +364,9 @@ contains
 	subroutine test4()
 		integer :: elems, i, j
 		integer :: nbflops(7,5), curnbflops
+		real :: curcputime, cputime(5,5)
 		double precision, dimension(5), parameter :: gamma= (/ 1d0, 2d0, 5d0, 1d1, 2d1 /)
-		double precision :: norm(5,5), curnorm, curcputime, cputime(5,5)
+		double precision :: norm(5,5), curnorm
 
 		do i = 1,7
 			do j = 1,5
@@ -420,7 +421,8 @@ contains
 		type(Matrix), pointer :: x1, x2
 		integer, intent(in) :: N
 		double precision, intent(in) :: y
-		double precision :: diffnorm, start, prodnorm, xnorm(1), diff(N), cputime, cpuarray(2), cpustart
+		double precision :: diffnorm, start, prodnorm, xnorm(1), diff(N)
+		real :: cputime, cpuarray(2), cpustart
 		character(len=128) :: command
 
 		write(command,'(a,i0,a)') './hmatrices makeGFull ', N, ' >G.out'
