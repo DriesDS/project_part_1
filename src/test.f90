@@ -431,7 +431,7 @@ contains
 		call SYSTEM(command)
 
 		call TIME(cpustart)
-		write(command,'(a,i0,a,i0,x,e12.4,a)') 'cat tests/randn', N, '.in | ./hmatrices vecProdHmat ', N, y, ' >x1.out'
+		write(command,'(a,i0,a,i0,x,e12.4,a)') 'cat tests/randn', N, '.in | ./hmatrices -t vecProdHmat ', N, y, ' >x1.out'
 		call SYSTEM(command)
 		call TIME(cputime)
 		cputime = cputime-cpustart
