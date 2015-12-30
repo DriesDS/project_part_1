@@ -423,8 +423,9 @@ contains
 	subroutine norm_vecprod(N,y, diffnorm, cputime)
 		type(Matrix), pointer :: x1, x2
 		integer, intent(in) :: N
+		real :: cputime
 		double precision, intent(in) :: y
-		double precision :: diffnorm, start, cputime, prodnorm, xnorm(1), diff(N)
+		double precision :: diffnorm, start, prodnorm, xnorm(1), diff(N)
 		character(len=128) :: command
 
 		write(command,'(a,i0,a)') './hmatrices makeGFull ', N, ' >G.out'
