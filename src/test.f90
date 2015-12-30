@@ -419,7 +419,8 @@ contains
 
 	subroutine norm_vecprod(N,y, diffnorm, flops)
 		type(Matrix), pointer :: x1, x2
-		integer, intent(in) :: N, flops
+		integer, intent(in) :: N
+		integer :: flops
 		double precision, intent(in) :: y
 		double precision :: diffnorm, start, prodnorm, xnorm(1), diff(N)
 		character(len=128) :: command
