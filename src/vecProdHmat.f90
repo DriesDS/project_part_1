@@ -45,7 +45,7 @@ contains
 			if (AH%endmat%full) then
 				flops = 2*size(AH%endmat%Ut,1)**2-size(AH%endmat%Ut,1)
 			else
-				flops = 11*size(AH%endmat%Ut,1)-3
+				flops = 11*size(AH%endmat%Ut,2)-3
 			endif
 			return
 		endif
