@@ -383,9 +383,11 @@ contains
 		do i = 1,5
 			do j = 1,5
 				call CPU_TIME(start)
+				write(0,*) "calling CPU time"
 				call norm_vecprod(2**(i+4), gamma(j), curnorm, curcputime)
 				norm(i,j) = curnorm
 				call CPU_TIME(curcputime)
+				write(0,*) "done"
 				curcputime = curcputime-start
 				cputime(i,j) = curcputime
 			enddo
