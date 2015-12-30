@@ -420,7 +420,7 @@ contains
 	subroutine norm_vecprod(N,y, diffnorm, flops)
 		type(Matrix), pointer :: x1, x2
 		integer, intent(in) :: N
-		integer :: flops
+		integer :: flops, i
 		double precision, intent(in) :: y
 		double precision :: diffnorm, start, prodnorm, xnorm(1), diff(N)
 		character(len=128) :: command
@@ -431,7 +431,10 @@ contains
 		call SYSTEM(command)
 
 		write(command,'(a,i0,a,i0,x,e12.4,a)') 'cat tests/randn', N, '.in | ./hmatrices -t vecProdHmat ', N, y, ' >x1.out'
-		call SYSTEM(command)
+
+		do i = 1,10
+			call SYSTEM(command)
+		enddo
 
 		open(10,file='x1.out')
 		call matrixReader(x1, 10)
