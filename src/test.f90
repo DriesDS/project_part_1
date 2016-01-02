@@ -442,6 +442,7 @@ contains
 		close(10)
 		diff = (x1%Ut(1,1:N)-x2%Ut(1,1:N))**2
 		diffnorm = sum(diff)
+		x1%Ut = x1%Ut**2
 		xnorm = sum(x1%Ut,2)
 		diffnorm = diffnorm/xnorm(1)
 

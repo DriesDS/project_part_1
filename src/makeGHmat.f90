@@ -129,7 +129,7 @@ contains
 
 		mat%Ut(1,1:s) = 1d0
 		mat%Ut(2,1:s) = (/ (2*pi*(beginy+i - ister)/N, i=0,s-1) /)
-		mat%Ut(3,1:s) = mat%Ut(2,1:s)**2/2
+		mat%Ut(3,1:s) = (mat%Ut(2,1:s)**2)/2d0
 
 		do j = -1,s-2 ! cause indices of j go from 0 to N-1
 			arg = pi*(2d0*ister-2d0*(j+beginx)-1d0)/N
