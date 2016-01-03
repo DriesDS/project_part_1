@@ -61,33 +61,33 @@ contains
 		if (Dist>s*gamma) then
 			GH%subtypeH = .false.
 
-!			!!! uncomment for approximation by formula
-!			allocate(GH%endmat)
-!			GH%endmat%full = .false.
-!			GH%endmat%pointU = .false.
-!			GH%endmat%pointV = .false.
-!			allocate(GH%endmat%Ut(k,s),GH%endmat%Vt(k,s))
-!			call calculateGapprox(GH%endmat, N, beginx, beginy, s)
-!			!!! \uncomment for approximation by formula
+			!!! uncomment for approximation by formula
+			allocate(GH%endmat)
+			GH%endmat%full = .false.
+			GH%endmat%pointU = .false.
+			GH%endmat%pointV = .false.
+			allocate(GH%endmat%Ut(k,s),GH%endmat%Vt(k,s))
+			call calculateGapprox(GH%endmat, N, beginx, beginy, s)
+			!!! \uncomment for approximation by formula
 
- 			!!! uncomment for approximation by svd
- 			allocate(fullapprox)
- 			allocate(GH%endmat)
- 			fullapprox%full = .true.
- 			fullapprox%pointU = .false.
- 			GH%endmat%full = .false.
- 			GH%endmat%pointU = .false.
- 			GH%endmat%pointV = .false.
- 			allocate(fullapprox%Ut(s,s))
- 			allocate(GH%endmat%Ut(k,s),GH%endmat%Vt(k,s))
+!  			!!! uncomment for approximation by svd
+!  			allocate(fullapprox)
+!  			allocate(GH%endmat)
+!  			fullapprox%full = .true.
+!  			fullapprox%pointU = .false.
+!  			GH%endmat%full = .false.
+!  			GH%endmat%pointU = .false.
+!  			GH%endmat%pointV = .false.
+!  			allocate(fullapprox%Ut(s,s))
+!  			allocate(GH%endmat%Ut(k,s),GH%endmat%Vt(k,s))
 
- 			call calculateGt(fullapprox%Ut, N, beginx, beginy, s)
- 			call lowrank(fullapprox, rankapprox, rank=k)
+!  			call calculateGt(fullapprox%Ut, N, beginx, beginy, s)
+!  			call lowrank(fullapprox, rankapprox, rank=k)
 
- 			GH%endmat%Ut(1:k, 1:s) = rankapprox%Ut(1:k, 1:s)
- 			GH%endmat%Vt(1:k, 1:s) = rankapprox%vt(1:k, 1:s)
- 			call M_dealloc(rankapprox)
- 			call M_dealloc(fullapprox)
+!  			GH%endmat%Ut(1:k, 1:s) = rankapprox%Ut(1:k, 1:s)
+!  			GH%endmat%Vt(1:k, 1:s) = rankapprox%vt(1:k, 1:s)
+!  			call M_dealloc(rankapprox)
+!  			call M_dealloc(fullapprox)
 ! 			!!! \uncomment for approximation by svd
 
 			return
