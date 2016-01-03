@@ -362,7 +362,7 @@ contains
 	end subroutine
 
 	subroutine test4()
-		integer :: elems, i, j, flops(5,5), curflops
+		integer :: i, j, flops(5,5), curflops
 		integer :: nbfloats(7,5), curnbfloats
 		double precision, dimension(5), parameter :: gamma= (/ 1d0, 2d0, 5d0, 1d1, 2d1 /)
 		double precision :: norm(5,5), curnorm
@@ -420,9 +420,9 @@ contains
 	subroutine norm_vecprod(N,y, diffnorm, flops)
 		type(Matrix), pointer :: x1, x2
 		integer, intent(in) :: N
-		integer :: flops, i
+		integer :: flops
 		double precision, intent(in) :: y
-		double precision :: diffnorm, start, prodnorm, xnorm(1), diff(N)
+		double precision :: diffnorm, xnorm, diff(N)
 		character(len=128) :: command
 
 		write(command,'(a,i0,a)') './hmatrices makeGFull ', N, ' >G.out'
@@ -440,11 +440,12 @@ contains
 		open(10,file='x2.out')
 		call matrixReader(x2, 10)
 		close(10)
+
 		diff = (x1%Ut(1,1:N)-x2%Ut(1,1:N))**2
 		diffnorm = sum(diff)
 		x1%Ut = x1%Ut**2
-		xnorm = sum(x1%Ut,2)
-		diffnorm = diffnorm/xnorm(1)
+		xnorm = sum(x1%Ut)
+		diffnorm = sqrt(diffnorm/xnorm(1))
 
 		call M_dealloc(x1)
 		call M_dealloc(x2)

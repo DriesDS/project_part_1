@@ -49,7 +49,6 @@ contains
 		type(HMatrix), pointer :: GH
 		type(Matrix), pointer :: fullapprox, rankapprox
 		integer, intent(in) :: N, beginx, beginy, s
-		integer :: j
 		double precision, intent(in) :: gamma
 		double precision :: ister, jster, Dist
 
