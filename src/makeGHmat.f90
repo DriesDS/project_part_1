@@ -23,7 +23,7 @@ contains
 	subroutine makeGHmat(AH, N, gamma, elems)
 		type(HMatrix), pointer :: AH
 		integer, intent(in) :: N
-		integer :: elems
+		integer, intent(inout) :: elems
 		double precision, intent(in) :: gamma
 		double precision :: NN
 

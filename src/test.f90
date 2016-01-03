@@ -264,7 +264,7 @@ contains
 		open(10,file='./tests/xfield.in')
 		call matrixReader(xfield, 10)
 		close(10)
-		call plotField(xfield, N)
+		!call plotField(xfield, N)
 		call M_dealloc(xfield)
 	end subroutine
 
@@ -445,7 +445,7 @@ contains
 		diffnorm = sum(diff)
 		x1%Ut = x1%Ut**2
 		xnorm = sum(x1%Ut)
-		diffnorm = sqrt(diffnorm/xnorm(1))
+		diffnorm = sqrt(diffnorm/xnorm)
 
 		call M_dealloc(x1)
 		call M_dealloc(x2)
