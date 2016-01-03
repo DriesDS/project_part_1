@@ -32,7 +32,7 @@ program hmatrices
 		currarg = currarg+1
 		timing = .true.
 	endif
-	
+
 	select case(cmd)
 	case('help')
 		call help()
@@ -85,8 +85,8 @@ program hmatrices
 		currarg = currarg+1
 		read(cmd,*) y
 		call makeGHmat(AH, N, y, elems)
-		call Hm_dealloc(AH)
 		write(*,*) elems
+		call Hm_dealloc(AH)
 	case('vecProdHmat')
 		allocate(AH)
 		call getarg(currarg,cmd)

@@ -38,8 +38,8 @@ contains
 		! kolom en kopieren die dan telkens in de volgende kolommen.
 		! inverted indices since we are calculating Gt
 		i = beginy
-		do j=0,s-1
-			mat(j+1,1) = -0.5d0*log( 2*(1-cos((1d0+2d0*(j+beginx)-2d0*i)*pi/N)) )
+		do j=-1,s-2
+			mat(j+2,1) = -0.5d0*log( 2*(1-cos((1d0+2d0*(j+beginx)-2d0*i)*pi/N)) )
 		enddo
 
 		if (s == N) then
@@ -49,7 +49,7 @@ contains
 			enddo
 		else
 			do i = 2,s
-				mat(1,i) = -0.5d0*log( 2*(1-cos((1d0+2d0*beginx-2d0*(i+beginy-1))*pi/N)) )
+				mat(1,i) = -0.5d0*log( 2*(1-cos((1d0+2d0*(beginx-1)-2d0*(i+beginy-1))*pi/N)) )
 				mat(2:s,i) = mat(1:s-1,i-1)
 			enddo
 		endif

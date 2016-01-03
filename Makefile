@@ -10,6 +10,7 @@ FFLAGS_g95      = -O3
 FFLAGS_gfortran = -O3 #-g -pedantic -Wall -Wimplicit-interface -Wunderflow -fbounds-check -fimplicit-none
 FFLAGS_ifort    = -O3 #-g -debug full -implicitnone -check -warn -free -Tf
 FFLAGS_nagfor   = -O3 #-g -C=all -gline -u -info -colour -kind=byte
+FFLAGS_mpif90   = -O3
 
 options = -lblas -llapack 
 
@@ -18,7 +19,7 @@ FFLAGS=$(FFLAGS_$(FC))
 
 hmatrices: $(objects)
 	$(FC) -o hmatrices $(objects) $(options)
-#	make clean
+	make clean
 
 hmatrices.o: $(src)/hmatrices.f90 $(modules)
 	$(FC) -c $(FFLAGS) $(src)/hmatrices.f90
@@ -78,5 +79,5 @@ vecProdHmat.o: $(src)/vecProdHmat.f90 matrixconverter.mod makeghmatmod.mod
 vecprodhmatmod.mod: $(src)/vecProdHmat.f90 vecProdHmat.o
 	$(FC) -c $(FFLAGS) $(src)/vecProdHmat.f90
 
-# clean:
-# 	rm $(objects) $(modules)
+clean:
+	rm $(objects) $(modules)
