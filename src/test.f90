@@ -410,7 +410,7 @@ contains
 		character(len=128) :: command
 		character(len=16) :: nbfloatsstr
 
-		write(command,'(a,i0,x,e12.4,a)') './hmatrices makeGHmat ', N, y, ' >flops.out'
+		write(command,'(a,i0,1x,e12.4,a)') './hmatrices makeGHmat ', N, y, ' >flops.out'
 		call SYSTEM(command)
 		open(10,file='./flops.out')
 		read(10,*) nbfloatsstr
@@ -429,10 +429,10 @@ contains
 
 		write(command,'(a,i0,a)') './hmatrices makeGFull ', N, ' >G.out'
 		call SYSTEM(command)
-		write(command,'(a,i0,a,i0,x,e12.4,a)') 'cat G.out tests/randn', N, '.in | ./hmatrices matprod >x2.out'
+		write(command,'(a,i0,a,i0,1x,e12.4,a)') 'cat G.out tests/randn', N, '.in | ./hmatrices matprod >x2.out'
 		call SYSTEM(command)
 
-		write(command,'(a,i0,a,i0,x,e12.4,a)') 'cat tests/randn', N, '.in | ./hmatrices vecProdHmat ', N, y, ' >x1.out'
+		write(command,'(a,i0,a,i0,1x,e12.4,a)') 'cat tests/randn', N, '.in | ./hmatrices vecProdHmat ', N, y, ' >x1.out'
 		call SYSTEM(command)
 
 		open(10,file='x1.out')
