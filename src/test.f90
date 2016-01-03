@@ -257,6 +257,8 @@ contains
 
 		call solveIntFull(G,X,N)
 		write(*,'(t10, e15.3,t40,"  <-- This should be around 0.712")') G%Ut(1,1)
+		write(*,*)
+		write(*,*)
 
 		call M_dealloc(G)
 		call M_dealloc(X)
